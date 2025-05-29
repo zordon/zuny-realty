@@ -11,7 +11,8 @@
     "build": "yarn workspace frontend build",
     "start": "yarn workspace frontend start",
     "backend:dev": "yarn workspace backend develop",
-    "backend:build": "yarn workspace backend build"
+    "backend:build": "yarn workspace backend build",
+    "backend:debug": "DEBUG=\"strapi:*\" yarn workspace backend node --inspect ../node_modules/@strapi/strapi/bin/strapi.js develop"
   },
   "dependencies": {
     "esbuild": "^0.25.4"

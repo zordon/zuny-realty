@@ -1,0 +1,126 @@
+import { Property, PropertyType } from './types';
+
+// These constants are not directly translatable or are identifiers
+export const AGENT_PHONE = "555-123-4567";
+export const AGENT_EMAIL = "jane.doe@momsrealty.com";
+export const AGENT_PHOTO_URL = "https://picsum.photos/seed/agentmom/200/200";
+
+// SITE_NAME, AGENT_NAME, AGENT_TITLE, AGENT_BIO are now in translation files.
+// Keys to access them: 'siteName', 'agentName', 'agentTitle', 'agentBio'
+
+export const MOCK_PROPERTIES: Property[] = [
+  {
+    id: '1',
+    title: 'Charming Suburban Oasis', // These would ideally be translatable from backend
+    address: '123 Sunshine Avenue, Pleasantville, PV 12345',
+    price: 525000,
+    currency: 'USD',
+    bedrooms: 3,
+    bathrooms: 2,
+    areaSqFt: 1850,
+    description: 'Discover this charming suburban oasis, perfect for families. This beautifully maintained home features an updated kitchen with stainless steel appliances, a cozy fireplace in the living room, and a spacious, fenced backyard with a patio ideal for entertaining. Located in a friendly neighborhood with top-rated schools and parks nearby.',
+    images: [
+      'https://picsum.photos/seed/property1img1/1024/768',
+      'https://picsum.photos/seed/property1img2/1024/768',
+      'https://picsum.photos/seed/property1img3/1024/768',
+      'https://picsum.photos/seed/property1img4/1024/768',
+    ],
+    type: PropertyType.SALE,
+    features: ['Updated Kitchen', 'Stainless Steel Appliances', 'Fireplace', 'Fenced Backyard', 'Patio', 'Top-Rated Schools'], // Features ideally translatable
+    agentName: 'agentName', // Key for i18n
+    agentPhone: AGENT_PHONE,
+    agentEmail: AGENT_EMAIL,
+    isFeatured: true,
+  },
+  {
+    id: '2',
+    title: 'Modern Downtown Loft',
+    address: '456 Urban Way, Suite 7B, Metro City, MC 67890',
+    price: 2800,
+    currency: 'USD',
+    bedrooms: 1,
+    bathrooms: 1,
+    areaSqFt: 950,
+    description: 'Experience stylish urban living in this modern downtown loft. Boasting high ceilings, exposed brick walls, and large windows offering stunning city views. The open-concept layout includes a gourmet kitchen and a sleek bathroom. Building amenities include a fitness center and rooftop terrace. Steps away from dining, shopping, and entertainment.',
+    images: [
+      'https://picsum.photos/seed/property2img1/1024/768',
+      'https://picsum.photos/seed/property2img2/1024/768',
+      'https://picsum.photos/seed/property2img3/1024/768',
+    ],
+    type: PropertyType.RENT,
+    features: ['High Ceilings', 'Exposed Brick', 'City Views', 'Open Concept', 'Gourmet Kitchen', 'Fitness Center', 'Rooftop Terrace'],
+    agentName: 'agentName', // Key for i18n
+    agentPhone: AGENT_PHONE,
+    agentEmail: AGENT_EMAIL,
+    isFeatured: true,
+  },
+  {
+    id: '3',
+    title: 'Spacious Family Home with Pool',
+    address: '789 Country Lane, Green Valley, GV 34567',
+    price: 780000,
+    currency: 'USD',
+    bedrooms: 5,
+    bathrooms: 3.5,
+    areaSqFt: 3200,
+    description: 'An exceptional family home offering ample space and luxury. This property features a grand foyer, formal living and dining rooms, a large family room with built-in shelving, and a chef’s kitchen. The master suite includes a spa-like bathroom and walk-in closet. Outside, enjoy a private backyard paradise with a swimming pool and covered lanai.',
+    images: [
+      'https://picsum.photos/seed/property3img1/1024/768',
+      'https://picsum.photos/seed/property3img2/1024/768',
+      'https://picsum.photos/seed/property3img3/1024/768',
+      'https://picsum.photos/seed/property3img4/1024/768',
+      'https://picsum.photos/seed/property3img5/1024/768',
+    ],
+    type: PropertyType.SALE,
+    features: ['Swimming Pool', 'Covered Lanai', 'Chef’s Kitchen', 'Spa-like Master Bath', 'Walk-in Closet', 'Formal Dining Room', 'Large Family Room'],
+    agentName: 'agentName', // Key for i18n
+    agentPhone: AGENT_PHONE,
+    agentEmail: AGENT_EMAIL,
+    isFeatured: false,
+  },
+  {
+    id: '4',
+    title: 'Cozy Lakefront Cabin',
+    address: '101 Willow Creek Rd, Lakeside, LS 54321',
+    price: 350000,
+    currency: 'USD',
+    bedrooms: 2,
+    bathrooms: 1,
+    areaSqFt: 1200,
+    description: 'Escape to this cozy lakefront cabin, perfect for weekend getaways or year-round living. Enjoy breathtaking lake views from the large deck. Inside, find a warm and inviting atmosphere with wood paneling, a stone fireplace, and an open living area. Includes a private dock for boating and fishing.',
+    images: [
+      'https://picsum.photos/seed/property4img1/1024/768',
+      'https://picsum.photos/seed/property4img2/1024/768',
+      'https://picsum.photos/seed/property4img3/1024/768',
+    ],
+    type: PropertyType.SALE,
+    features: ['Lakefront', 'Private Dock', 'Large Deck', 'Stone Fireplace', 'Wood Paneling', 'Scenic Views'],
+    agentName: 'agentName', // Key for i18n
+    agentPhone: AGENT_PHONE,
+    agentEmail: AGENT_EMAIL,
+    isFeatured: true,
+  },
+  {
+    id: '5',
+    title: 'Luxury Penthouse Apartment',
+    address: '99 Skyview Terrace, Apt PH1, Opulence City, OC 11223',
+    price: 12500,
+    currency: 'USD',
+    bedrooms: 3,
+    bathrooms: 3,
+    areaSqFt: 2800,
+    description: 'Indulge in the epitome of luxury with this stunning penthouse apartment. Offering panoramic city and ocean views from floor-to-ceiling windows and multiple private balconies. Features a state-of-the-art kitchen, designer finishes throughout, smart home technology, and exclusive building amenities including a private elevator, concierge service, and infinity pool.',
+    images: [
+      'https://picsum.photos/seed/property5img1/1024/768',
+      'https://picsum.photos/seed/property5img2/1024/768',
+      'https://picsum.photos/seed/property5img3/1024/768',
+      'https://picsum.photos/seed/property5img4/1024/768',
+    ],
+    type: PropertyType.RENT,
+    features: ['Panoramic Views', 'Private Balconies', 'State-of-the-art Kitchen', 'Designer Finishes', 'Smart Home Technology', 'Private Elevator', 'Concierge', 'Infinity Pool'],
+    agentName: 'agentName', // Key for i18n
+    agentPhone: AGENT_PHONE,
+    agentEmail: AGENT_EMAIL,
+    isFeatured: false,
+  }
+];

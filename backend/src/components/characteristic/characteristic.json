@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_characteristics",
+  "info": {
+    "displayName": "Characteristic",
+    "icon": "list",
+    "description": "A key-value characteristic for a property"
+  },
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "value": {
+      "type": "string",
+      "required": true
+    },
+    "suffix": {
+      "type": "string"
+    },
+    "prefix": {
+      "type": "string"
+    }
+  }
+}

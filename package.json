@@ -1,0 +1,20 @@
+{
+  "name": "zuny-real-estate",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "yarn workspace frontend dev",
+    "build": "yarn workspace frontend build",
+    "start": "yarn workspace frontend start",
+    "backend:dev": "yarn workspace backend develop",
+    "backend:build": "yarn workspace backend build"
+  },
+  "dependencies": {
+    "esbuild": "^0.25.4"
+  },
+  "packageManager": "yarn@4.5.0"
+}

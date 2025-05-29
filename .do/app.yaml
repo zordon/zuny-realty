@@ -1,10 +1,11 @@
 name: zuny-real-estate-backend
 services:
 - name: strapi-api
-  source_dir: /backend
+  source_dir: backend
   github:
-    repo: your-github-username/zuny-real-estate
+    repo: zordon/zuny-real-estate
     branch: main
+    deploy_on_push: true
   run_command: yarn start
   build_command: yarn install && yarn build
   environment_slug: node-js

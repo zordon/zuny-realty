@@ -33,11 +33,11 @@
     "typescript": "^5"
   },
   "engines": {
-    "node": ">=18.0.0 <=22.x.x",
-    "npm": ">=6.0.0"
+    "node": "=22.x.x"
   },
   "strapi": {
     "uuid": "1ec8c806-b2df-41ab-aba3-fe8f03a2c719",
     "installId": "9f5707a6ea345f5e9d728dcc4a2c81630cd775f1c1af2e64e8913e058b221030"
-  }
+  },
+  "packageManager": "yarn@4.5.0"
 }

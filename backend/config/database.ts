@@ -26,8 +26,9 @@ export default ({ env }) => {
         password: env('DATABASE_PASSWORD', 'strapi'),
         ssl: env.bool('DATABASE_SSL', false) && {
           ca: env('DATABASE_SSL_CA', undefined),
-          rejectUnauthorized: false
+          rejectUnauthorized: env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED', true),
         },
+        schema: env('DATABASE_SCHEMA', 'public'),
       },
     },
     sqlite: {

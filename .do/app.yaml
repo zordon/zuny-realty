@@ -1,14 +1,13 @@
 name: zuny-real-estate-backend
 services:
 - name: strapi-api
-  source_dir: backend # Build command runs inside 'backend'
-  # ... other github, environment_slug, etc. settings ...
-  build_command: yarn install --immutable && yarn build # Or --frozen-lockfile for Yarn v1
-  run_command: yarn start
+  source_dir: backend
   github:
     repo: zordon/zuny-real-estate
     branch: main
     deploy_on_push: true
+  run_command: cd .. && yarn workspace backend start
+  build_command: yarn install && yarn build
   environment_slug: node-js
   instance_count: 1
   instance_size_slug: basic-xxs

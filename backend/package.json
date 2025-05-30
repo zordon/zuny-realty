@@ -13,8 +13,7 @@
     "strapi": "strapi",
     "upgrade": "npx @strapi/upgrade latest",
     "upgrade:dry": "npx @strapi/upgrade latest --dry",
-    "debug": "DEBUG=strapi:* strapi develop --inspect",
-    "do-build": "cd ../ && yarn install --immutable && cd backend && yarn build"
+    "debug": "DEBUG=strapi:* strapi develop --inspect"
   },
   "dependencies": {
     "@strapi/plugin-cloud": "5.13.1",
@@ -40,5 +39,5 @@
     "uuid": "1ec8c806-b2df-41ab-aba3-fe8f03a2c719",
     "installId": "9f5707a6ea345f5e9d728dcc4a2c81630cd775f1c1af2e64e8913e058b221030"
   },
-  "packageManager": "yarn@4.5.0"
+  "packageManager": "yarn@4.9.1"
 }

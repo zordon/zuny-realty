@@ -21,7 +21,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: "22"
 
       - name: Enable Corepack
         run: corepack enable
@@ -47,16 +47,25 @@ jobs:
           projectName: zuny-real-estate
           directory: ./frontend/out
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          wranglerVersion: '3'
+          wranglerVersion: "3"
 
   deploy-backend-digitalocean:
     runs-on: ubuntu-latest
-    name: Deploy Backend to DigitalOcean
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Deploy to DO App Platform
-        uses: digitalocean/app_action@v1.1.5
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to Droplet
+        uses: appleboy/ssh-action@master
         with:
-          app_name: zuny-real-estate-api
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} 
+          host: ${{ secrets.DROPLET_HOST }}
+          username: ${{ secrets.DROPLET_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/your-project-name # Adjust to your project path
+            git pull origin main
+            cd backend
+            yarn install --frozen-lockfile
+            yarn build
+            pm2 restart strapi-api || pm2 start yarn --name strapi-api --interpreter bash -- start
+            echo "Deployment completed"

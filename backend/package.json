@@ -13,7 +13,8 @@
     "strapi": "strapi",
     "upgrade": "npx @strapi/upgrade latest",
     "upgrade:dry": "npx @strapi/upgrade latest --dry",
-    "debug": "DEBUG=strapi:* strapi develop --inspect"
+    "debug": "DEBUG=strapi:* strapi develop --inspect",
+    "do-build": "cd ../ && yarn install --immutable && cd backend && yarn build"
   },
   "dependencies": {
     "@strapi/plugin-cloud": "5.13.1",

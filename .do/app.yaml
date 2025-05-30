@@ -7,7 +7,7 @@ services:
     branch: main
     deploy_on_push: true
   run_command: yarn start
-  build_command: yarn install && yarn build
+  build_command: yarn do-build
   environment_slug: node-js
   instance_count: 1
   instance_size_slug: basic-xxs

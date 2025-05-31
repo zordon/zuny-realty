@@ -16,10 +16,10 @@
     "debug": "DEBUG=strapi:* strapi develop --inspect"
   },
   "dependencies": {
-    "@strapi/plugin-cloud": "5.13.1",
-    "@strapi/plugin-users-permissions": "5.13.1",
+    "@strapi/plugin-cloud": "5.14.0",
+    "@strapi/plugin-users-permissions": "5.14.0",
     "@strapi/provider-upload-aws-s3": "^5.14.0",
-    "@strapi/strapi": "5.13.1",
+    "@strapi/strapi": "5.14.0",
     "better-sqlite3": "11.3.0",
     "esbuild": "^0.25.4",
     "pg": "^8.16.0",

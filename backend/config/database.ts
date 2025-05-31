@@ -20,6 +20,7 @@ export default ({ env }) => {
     console.log('DATABASE_NAME:', env('DATABASE_NAME', 'strapi'));
     console.log('DATABASE_USERNAME:', env('DATABASE_USERNAME', 'strapi'));
     console.log('DATABASE_URL provided:', !!env('DATABASE_URL'));
+    console.log('DATABASE_URL value:', env('DATABASE_URL') ? 'PRESENT' : 'NOT_PRESENT');
     
     if (env.bool('DATABASE_SSL', false)) {
       const certPath = path.join(__dirname, '..', '..', 'ca_cert.cert');
@@ -32,7 +33,16 @@ export default ({ env }) => {
         console.log('Certificate preview:', cert.substring(0, 100) + '...');
       }
       
-      console.log('SSL rejectUnauthorized will be:', isProduction ? false : env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED', true));
+      const rejectUnauthorizedValue = isProduction ? false : env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED', true);
+      console.log('SSL rejectUnauthorized will be:', rejectUnauthorizedValue);
+      
+      // Test the SSL object creation
+      const sslObject = env.bool('DATABASE_SSL', false) && {
+        rejectUnauthorized: rejectUnauthorizedValue,
+        ca: fs.readFileSync(path.join(__dirname, '..', '..', 'ca_cert.cert')).toString(),
+      };
+      console.log('SSL object test result:', sslObject ? 'CREATED' : 'NULL/FALSE');
+      console.log('env.bool DATABASE_SSL result:', env.bool('DATABASE_SSL', false));
     }
   }
   console.log('=== END DEBUG INFO ===');
@@ -52,11 +62,16 @@ export default ({ env }) => {
     },
     postgres: {
       connection: {
-        host: env('DATABASE_HOST', 'localhost'),
-        port: env.int('DATABASE_PORT', 5432),
-        database: env('DATABASE_NAME', 'strapi'),
-        user: env('DATABASE_USERNAME', 'strapi'),
-        password: env('DATABASE_PASSWORD', 'strapi'),
+        ...(env('DATABASE_URL') 
+          ? { connectionString: env('DATABASE_URL') }
+          : {
+              host: env('DATABASE_HOST', 'localhost'),
+              port: env.int('DATABASE_PORT', 5432),
+              database: env('DATABASE_NAME', 'strapi'),
+              user: env('DATABASE_USERNAME', 'strapi'),
+              password: env('DATABASE_PASSWORD', 'strapi'),
+            }
+        ),
         ssl: env.bool('DATABASE_SSL', false) && {
           // For managed databases, often need more lenient settings
           rejectUnauthorized: isProduction ? false : env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED', true),

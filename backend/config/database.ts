@@ -7,6 +7,11 @@ export default ({ env }) => {
   console.log(fs.readFileSync(path.join(__dirname, '..', '..', 'ca_cert.cert')).toString());
   console.log(env.bool('DATABASE_SSL', false));
   console.log(env('DATABASE_SSL_CA', undefined));
+  console.log(env.bool('DATABASE_SSL', false) && {
+    rejectUnauthorized: env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED', true),
+    ca: fs.readFileSync(path.join(__dirname, '..', '..', 'ca_cert.cert')).toString(),
+    capath: path.join(__dirname, '..', '..', 'ca_cert.cert')
+  });
   const connections = {
     mysql: {
       connection: {

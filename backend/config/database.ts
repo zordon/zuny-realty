@@ -3,7 +3,8 @@ import * as path from 'path';
 
 export default ({ env }) => {
   const client = env('DATABASE_CLIENT', 'sqlite');
-
+  console.log(path.join(__dirname, '..', '..', 'ca_cert.cert'));
+  console.log(fs.readFileSync(path.join(__dirname, '..', '..', 'ca_cert.cert')));
   const connections = {
     mysql: {
       connection: {
@@ -27,6 +28,7 @@ export default ({ env }) => {
         ssl: env.bool('DATABASE_SSL', false) && {
           rejectUnauthorized: env.bool('DATABASE_SSL_REJECT_UNAUTHORIZED', true),
           ca: fs.readFileSync(path.join(__dirname, '..', '..', 'ca_cert.cert')),
+          capath: path.join(__dirname, '..', '..', 'ca_cert.cert')
         },
         schema: env('DATABASE_SCHEMA', 'public'),
       },

@@ -108,8 +108,8 @@ export interface StrapiPropertyDataItem {
   agentPhone?: string;
   agentEmail?: string;
   
-  // Adding characteristics field based on Postman example and usage in api.ts
-  characteristics?: { id: number; label: string; value: string; suffix?: string; prefix?: string; key?: string | null; isWidget?: boolean | null }[] | null;
+  // Update characteristics to use StrapiCharacteristic type
+  characteristics?: StrapiCharacteristic[] | null;
 }
 
 // Strapi specific types
@@ -195,3 +195,44 @@ export interface StrapiPropertyDataAttributesOld {
 
 // Type for items received in the API responses (data array or single data object)
 export type StrapiPropertyDataItemOld = StrapiResponseDataOld<StrapiPropertyDataAttributesOld>;
+
+// Data structure for creating a new property in Strapi
+export interface StrapiPropertyInputData {
+  title: string;
+  description: string;
+  address: string;
+  price: number;
+  currency: string;
+  bedrooms: number;
+  bathrooms: number;
+  propertyType: 'sale' | 'rent';
+  // areaSqFt: number; // Removed, as area is now a characteristic component
+  isFeatured?: boolean;
+  
+  features?: Array<{ name: string } | number>; 
+  images?: number[]; 
+
+  characteristics?: Array<{
+    label: string;
+    value: string;
+    suffix?: string;
+    prefix?: string | null;
+    key?: string; // e.g., "area"
+    isWidget?: boolean | null;
+    // id is omitted for creation, Strapi assigns it
+  }>;
+
+  documentId?: string; 
+  slug?: string;       
+}
+
+// Define a type for individual characteristic components
+export interface StrapiCharacteristic {
+  id: number;
+  label: string;
+  value: string;
+  suffix?: string;
+  prefix?: string | null;
+  key?: string | null;
+  isWidget?: boolean | null;
+}

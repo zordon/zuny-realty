@@ -1,4 +1,4 @@
-import { Property, PropertyType, Feature, StrapiPropertyDataItem, StrapiImage, StrapiFeature } from '@/types';
+import { Property, PropertyType, Feature, StrapiPropertyDataItem, StrapiImage, StrapiFeature, StrapiCharacteristic } from '@/types';
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
@@ -48,7 +48,7 @@ const mapStrapiDataToProperty = (item: StrapiPropertyDataItem): Property | null 
 
   let resolvedAreaSqFt = item.areaSqFt;
   if (typeof resolvedAreaSqFt !== 'number' && characteristics) {
-    const areaCharacteristic = characteristics.find((char: { label: string; value: string }) => char.label === 'area');
+    const areaCharacteristic = characteristics.find((char: StrapiCharacteristic) => char.key === 'area');
     if (areaCharacteristic && areaCharacteristic.value) {
       resolvedAreaSqFt = parseInt(areaCharacteristic.value, 10);
       if (isNaN(resolvedAreaSqFt)) resolvedAreaSqFt = 0;

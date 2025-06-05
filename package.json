@@ -13,13 +13,17 @@
     "backend:start": "yarn workspace backend start",
     "backend:dev": "yarn workspace backend develop",
     "backend:build": "yarn workspace backend build",
-    "backend:debug": "DEBUG=\"strapi:*\" yarn workspace backend node --inspect ../node_modules/@strapi/strapi/bin/strapi.js develop"
+    "backend:debug": "DEBUG=\"strapi:*\" yarn workspace backend node --inspect ../node_modules/@strapi/strapi/bin/strapi.js develop",
+    "cf:preview": "yarn workspace frontend preview",
+    "cf:deploy": "yarn workspace frontend deploy",
+    "cf:typegen": "yarn workspace frontend cf-typegen"
   },
   "dependencies": {
     "esbuild": "^0.25.4"
   },
   "devDependencies": {
-    "next": "15.3.2"
+    "next": "15.3.2",
+    "wrangler": "^4.19.1"
   },
   "packageManager": "yarn@4.9.1"
 }

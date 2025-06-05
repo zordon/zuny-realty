@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'export',
+  // output: 'export', // REMOVED to allow OpenNext to handle the build correctly
   trailingSlash: true,
   images: {
     unoptimized: true,

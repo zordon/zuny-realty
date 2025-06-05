@@ -11,6 +11,7 @@ dist/
 build/
 .next/
 out/
+.open-next/
 
 # Environment variables
 .env
@@ -73,10 +74,6 @@ out/
 # Nuxt.js build / generate output
 .nuxt
 dist
-
-# Gatsby files
-.cache/
-public
 
 # Storybook build outputs
 .out

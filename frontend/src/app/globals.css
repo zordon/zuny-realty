@@ -24,3 +24,22 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Custom styles for form elements to ensure text contrast */
+input,
+textarea,
+select {
+  color: #171717; /* Consistently dark text (matches light mode --foreground) */
+  /* This ensures contrast assuming these elements largely retain light backgrounds */
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #6b7280; /* Tailwind's gray-500 - good medium gray for placeholders on light backgrounds */
+}
+
+/* Ensure select options also have good contrast */
+select option {
+  color: #171717;         /* Dark text for options */
+  background-color: #ffffff; /* Ensure options have a light background */
+}

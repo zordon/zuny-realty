@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Property, PropertyType } from '@/types'
 
 interface PropertyCardProps {
@@ -21,22 +22,51 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
     return type === PropertyType.SALE ? 'En Venta' : 'En Alquiler'
   }
 
+  const transparentPixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+  
+  let rawImageUrl: string | null = null;
+  if (property.images && property.images.length > 0 && property.images[0]) {
+    rawImageUrl = property.images[0];
+  }
+
+  let imageUrl: string | null = null;
+  if (rawImageUrl) {
+    if (rawImageUrl.startsWith('http://') || rawImageUrl.startsWith('https://')) {
+      imageUrl = rawImageUrl;
+    } else {
+      const strapiApiUrl = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337';
+      // Ensure no double slashes if rawImageUrl starts with a slash
+      imageUrl = `${strapiApiUrl}${rawImageUrl.startsWith('/') ? rawImageUrl : '/' + rawImageUrl}`;
+    }
+  }
+
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-xl">
-      <Link href={`/property/${property.id}`}>
-        <div className="relative">
-          <img 
-            src={property.images[0]} 
-            alt={property.title} 
-            className="w-full h-56 object-cover" 
-          />
+      <Link href={`/property/${property.documentId}`}>
+        <div className="relative h-56 w-full">
+          {imageUrl ? (
+            <Image 
+              src={imageUrl} 
+              alt={property.title} 
+              fill
+              className="object-cover"
+              placeholder="blur"
+              blurDataURL={transparentPixel}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          ) : (
+            <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+              {/* Optional: Add an icon or text here for 'No Image' */}
+              {/* <span className="text-gray-500">No Image</span> */}
+            </div>
+          )}
           <div className="absolute top-4 left-4">
             <span className={`px-3 py-1 text-xs font-semibold rounded-full ${
-              property.type === PropertyType.SALE 
+              property.propertyType === PropertyType.SALE 
                 ? 'bg-blue-600 text-white' 
                 : 'bg-green-600 text-white'
             }`}>
-              {getPropertyTypeLabel(property.type)}
+              {getPropertyTypeLabel(property.propertyType)}
             </span>
           </div>
           {property.isFeatured && (
@@ -50,7 +80,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
       </Link>
       
       <div className="p-6">
-        <Link href={`/property/${property.id}`}>
+        <Link href={`/property/${property.documentId}`}>
           <h3 className="text-xl font-semibold text-gray-900 mb-2 hover:text-blue-700 transition-colors line-clamp-2">
             {property.title}
           </h3>
@@ -65,7 +95,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
         
         <p className="text-2xl font-bold text-blue-700 mb-4">
           {formatPrice(property.price, property.currency)}
-          {property.type === PropertyType.RENT && (
+          {property.propertyType === PropertyType.RENT && (
             <span className="text-sm font-normal text-gray-500">/mes</span>
           )}
         </p>
@@ -101,7 +131,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
             <p>{property.agentPhone}</p>
           </div>
           <Link 
-            href={`/property/${property.id}`}
+            href={`/property/${property.documentId}`}
             className="bg-blue-700 hover:bg-blue-800 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-sm"
           >
             Ver Detalles

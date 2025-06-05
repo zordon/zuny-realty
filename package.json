@@ -18,5 +18,8 @@
   "dependencies": {
     "esbuild": "^0.25.4"
   },
+  "devDependencies": {
+    "next": "15.3.2"
+  },
   "packageManager": "yarn@4.9.1"
 }

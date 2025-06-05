@@ -2,67 +2,13 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import HeroSection from '@/components/HeroSection'
 import PropertyCard from '@/components/PropertyCard'
-import { Property, PropertyType } from '@/types'
+import { Property } from '@/types'
+import { fetchFeaturedProperties } from '@/lib/api'
+import Image from 'next/image'
 
-// Sample featured properties data
-const featuredProperties: Property[] = [
-  {
-    id: '1',
-    title: 'Hermosa Casa en Penonome con Dos Lotes',
-    address: 'Penonomé, Coclé',
-    price: 325000,
-    currency: 'USD',
-    bedrooms: 5,
-    bathrooms: 5,
-    areaSqFt: 2990,
-    description: 'Hermosa y espaciosa casa con dos lotes en una ubicación privilegiada. Perfecta para familias grandes.',
-    images: ['/api/placeholder/400/300'],
-    type: PropertyType.SALE,
-    features: ['Amplio jardín', 'Garage para 2 carros', 'Terraza', 'Cocina moderna'],
-    agentName: 'Zuny Rodriguez',
-    agentPhone: '+507-6273-5027',
-    agentEmail: 'admin@zunyrealty.com',
-    isFeatured: true,
-  },
-  {
-    id: '2', 
-    title: 'Apartamento de Lujo en Bella Vista',
-    address: 'Bella Vista, Ciudad de Panamá',
-    price: 315000,
-    currency: 'USD',
-    bedrooms: 3,
-    bathrooms: 3,
-    areaSqFt: 1700,
-    description: 'Apartamento moderno con vista panorámica de la ciudad. Acabados de lujo y excelente ubicación.',
-    images: ['/api/placeholder/400/300'],
-    type: PropertyType.SALE,
-    features: ['Vista panorámica', 'Gimnasio', 'Piscina', 'Seguridad 24/7'],
-    agentName: 'Zuny Rodriguez',
-    agentPhone: '+507-6273-5027',
-    agentEmail: 'admin@zunyrealty.com',
-    isFeatured: true,
-  },
-  {
-    id: '3',
-    title: 'Casa de Playa en Las Lajas',
-    address: 'Chame, Panamá Oeste',
-    price: 399000,
-    currency: 'USD',
-    bedrooms: 4,
-    bathrooms: 3,
-    areaSqFt: 3229,
-    description: 'Hermosa casa frente al mar con acceso directo a la playa. Ideal para vacaciones y relajación.',
-    images: ['/api/placeholder/400/300'],
-    type: PropertyType.SALE,
-    features: ['Frente al mar', 'Terraza amplia', 'BBQ área', 'Parking'],
-    agentName: 'Zuny Rodriguez',
-    agentPhone: '+507-6273-5027',
-    agentEmail: 'admin@zunyrealty.com',
-    isFeatured: true,
-  },
-]
+export default async function HomePage() {
+  const featuredProperties: Property[] = await fetchFeaturedProperties()
 
-export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
@@ -160,10 +106,12 @@ export default function HomePage() {
               </div>
               
               <div className="relative">
-                <img
+                <Image
                   src="/api/placeholder/600/400"
                   alt="ZuR Real Estate Office"
                   className="rounded-lg shadow-xl"
+                  width={600}
+                  height={400}
                 />
                 <div className="absolute inset-0 bg-blue-700 bg-opacity-10 rounded-lg"></div>
               </div>

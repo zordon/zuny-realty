@@ -52,15 +52,15 @@ const HeroSection: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
             <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4">
               <div className="text-3xl font-bold text-yellow-400 mb-1">300+</div>
-              <div className="text-blue-100 text-sm font-medium">Propiedades</div>
+              <div className="text-blue-700 text-sm font-medium">Propiedades</div>
             </div>
             <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4">
               <div className="text-3xl font-bold text-yellow-400 mb-1">5+</div>
-              <div className="text-blue-100 text-sm font-medium">Años de Experiencia</div>
+              <div className="text-blue-700 text-sm font-medium">Años de Experiencia</div>
             </div>
             <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4">
               <div className="text-3xl font-bold text-yellow-400 mb-1">500+</div>
-              <div className="text-blue-100 text-sm font-medium">Clientes Satisfechos</div>
+              <div className="text-blue-700 text-sm font-medium">Clientes Satisfechos</div>
             </div>
           </div>
         </div>

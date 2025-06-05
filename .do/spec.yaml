@@ -1,0 +1,79 @@
+# .do/spec.yaml
+# DigitalOcean App Spec for Strapi Backend
+# Frontend is deployed separately on Cloudflare Pages.
+
+name: zuny-website # App Name on DigitalOcean
+region: nyc # Or your preferred region
+services:
+  - name: backend # Your Strapi service
+    git:
+      repo: zordon/zuny-realty # Your GitHub repository
+      branch: main # Your deployment branch
+    build_command: |
+      echo "Backend: Checking for changes..."
+      if [ -n "$GIT_PREVIOUS_COMMIT_SHA" ]; then
+        # Check for changes only within the 'backend/' directory
+        if git diff --quiet $GIT_PREVIOUS_COMMIT_SHA $GIT_COMMIT_SHA -- backend/; then
+          echo "Backend: No changes detected in 'backend/' directory since last deployment ($GIT_PREVIOUS_COMMIT_SHA)."
+          echo "Skipping actual build and deployment for backend."
+          exit 0
+        else
+          echo "Backend: Changes detected in 'backend/' directory. Proceeding with build."
+        fi
+      else
+        echo "Backend: No GIT_PREVIOUS_COMMIT_SHA found. Proceeding with build (this might be the first deployment)."
+      fi
+      echo "Backend: Running actual build command..."
+      # Ensure this is the correct build command for your Strapi backend
+      # Option 1: If you have a script in your root package.json like "build:backend": "yarn workspace backend build"
+      yarn build:backend
+      # Option 2: Or, if your backend/package.json has a "build" script and source_dir is /backend
+      # yarn build
+      # Option 3: Explicitly call yarn workspace
+      # yarn workspace backend build
+    run_command: |
+      # Ensure this is the correct run command for your Strapi backend
+      # Option 1: If you have a script in your root package.json like "start:backend": "yarn workspace backend start"
+      yarn start:backend
+      # Option 2: Or, if your backend/package.json has a "start" script and source_dir is /backend
+      # yarn start
+      # Option 3: Explicitly call yarn workspace
+      # yarn workspace backend start
+    http_port: 1337 # Default Strapi port
+    instance_size_slug: basic-xxs # Adjust as needed (e.g., basic-xs, professional-xs)
+    instance_count: 1
+    # Define Environment Variables for your Strapi Backend
+    # Ensure these are correctly set in your DigitalOcean App settings or here directly.
+    # Secrets (like API tokens, database credentials) should ideally be managed as secrets in DO.
+    envs:
+      - key: NODE_ENV
+        value: production
+      # Example: Database URL (if using a DO managed database or external)
+      # - key: DATABASE_URL
+      #   scope: RUN_AND_BUILD_TIME
+      #   value: "${db.DATABASE_URL}" # If using a DO database component named 'db'
+      # Example: Strapi Admin JWT Secret (generate a secure random string)
+      # - key: ADMIN_JWT_SECRET
+      #   scope: RUN_AND_BUILD_TIME
+      #   type: SECRET
+      #   value: "your_strong_random_admin_jwt_secret_here"
+      # Example: Strapi API Token Salt (generate a secure random string)
+      # - key: API_TOKEN_SALT
+      #   scope: RUN_AND_BUILD_TIME
+      #   type: SECRET
+      #   value: "your_strong_random_api_token_salt_here"
+      # Example: Application Keys (comma-separated list of secure random strings)
+      # - key: APP_KEYS
+      #   scope: RUN_AND_BUILD_TIME
+      #   type: SECRET
+      #   value: "key1,key2,key3,key4" # Generate with `openssl rand -base64 16` four times
+
+# Optional: Add a database component if your Strapi backend needs one and isn't external
+# databases:
+#   - name: db
+#     engine: PG # PostgreSQL
+#     version: "14" # Or your preferred version
+#     # num_nodes: 1 # For primary node
+#     size: db-s-1vcpu-1gb # Choose an appropriate size
+#     # db_name: strapi_db # Name of the database
+#     # db_user: strapi_user # Name of the user

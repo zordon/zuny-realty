@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // output: 'export', // REMOVED to allow OpenNext to handle the build correctly
+  output: process.env.CF_PAGES === '1' ? 'export' : undefined,
   trailingSlash: true,
   images: {
     unoptimized: true,

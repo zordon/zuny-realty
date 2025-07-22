@@ -33,7 +33,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, altText }) => {
             <button
               key={index}
               onClick={() => setMainImage(image)}
-              className={`rounded-md overflow-hidden border-2 transition-all duration-200 ${mainImage === image ? 'border-blue-500 scale-105' : 'border-transparent hover:border-blue-300'}`}
+                              className={`rounded-md overflow-hidden border-2 transition-all duration-200 ${mainImage === image ? 'border-yellow-500 scale-105' : 'border-transparent hover:border-yellow-300'}`}
               aria-label={t('imageGallery.thumbnailAlt', {altText, index: index + 1})}
             >
               <Image 

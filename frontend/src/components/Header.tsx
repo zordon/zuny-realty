@@ -27,9 +27,9 @@ const Header: React.FC = () => {
             <Image 
               src="/logo.png" 
               alt="ZuR Real Estate" 
-              width={120}
-              height={60}
-              className="h-12 w-auto"
+              width={180}
+              height={90}
+              className="h-16 w-auto"
               priority
             />
             <div className="flex flex-col">
@@ -45,8 +45,8 @@ const Header: React.FC = () => {
                 href={item.href}
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                   isActive(item.href)
-                    ? 'text-blue-700 bg-blue-50 border-b-2 border-blue-700'
-                    : 'text-gray-700 hover:text-blue-700 hover:bg-gray-50'
+                    ? 'text-yellow-700 bg-yellow-50 border-b-2 border-yellow-700'
+                    : 'text-gray-700 hover:text-yellow-700 hover:bg-gray-50'
                 }`}
               >
                 {item.label}
@@ -56,16 +56,16 @@ const Header: React.FC = () => {
             {/* Contact Button */}
             <Link
               href="tel:+507-6273-5027"
-              className="bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors duration-200 font-medium"
+              className="bg-yellow-700 text-white px-4 py-2 rounded-lg hover:bg-yellow-800 transition-colors duration-200 font-medium"
             >
-              +507 6273-5027
+                              +507 6617-7498
             </Link>
           </nav>
 
           {/* Mobile menu button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden text-gray-700 hover:text-blue-700 focus:outline-none"
+            className="md:hidden text-gray-700 hover:text-yellow-700 focus:outline-none"
           >
             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               {isMenuOpen ? (
@@ -87,8 +87,8 @@ const Header: React.FC = () => {
                   href={item.href}
                   className={`px-3 py-2 rounded-md text-sm font-medium ${
                     isActive(item.href)
-                      ? 'text-blue-700 bg-blue-50'
-                      : 'text-gray-700 hover:text-blue-700 hover:bg-gray-50'
+                                          ? 'text-yellow-700 bg-yellow-50'
+                    : 'text-gray-700 hover:text-yellow-700 hover:bg-gray-50'
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
@@ -97,10 +97,10 @@ const Header: React.FC = () => {
               ))}
               <Link
                 href="tel:+507-6273-5027"
-                className="bg-blue-700 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-800 transition-colors duration-200 text-center"
+                className="bg-yellow-700 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-yellow-800 transition-colors duration-200 text-center"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Llamar: +507 6273-5027
+                Llamar: +507 6617-7498
               </Link>
             </div>
           </div>

@@ -22,7 +22,7 @@ export default async function HomePage() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Inmuebles <span className="text-blue-700">Destacados</span>
+                Inmuebles <span className="text-yellow-700">Destacados</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 Descubre nuestras propiedades más exclusivas, cuidadosamente seleccionadas para ofrecerte las mejores opciones
@@ -38,7 +38,7 @@ export default async function HomePage() {
             <div className="text-center mt-12">
               <a
                 href="/properties"
-                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-700 hover:bg-blue-800 transition-colors duration-200"
+                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-yellow-700 hover:bg-yellow-800 transition-colors duration-200"
               >
                 Ver Todas las Propiedades
                 <svg className="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -55,7 +55,7 @@ export default async function HomePage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                  ¿Por qué elegir <span className="text-blue-700">ZuR Real Estate?</span>
+                  ¿Por qué elegirnos?
                 </h2>
                 <p className="text-lg text-gray-600 mb-6">
                   Con años de experiencia en el mercado inmobiliario panameño, ofrecemos un servicio personalizado y profesional para ayudarte a encontrar la propiedad de tus sueños.
@@ -63,8 +63,8 @@ export default async function HomePage() {
                 <div className="space-y-4">
                   <div className="flex items-start">
                     <div className="flex-shrink-0">
-                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                        <svg className="w-5 h-5 text-blue-700" fill="currentColor" viewBox="0 0 20 20">
+                      <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                        <svg className="w-5 h-5 text-yellow-700" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
                       </div>
@@ -77,8 +77,8 @@ export default async function HomePage() {
                   
                   <div className="flex items-start">
                     <div className="flex-shrink-0">
-                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                        <svg className="w-5 h-5 text-blue-700" fill="currentColor" viewBox="0 0 20 20">
+                      <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                        <svg className="w-5 h-5 text-yellow-700" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
                       </div>
@@ -91,8 +91,8 @@ export default async function HomePage() {
 
                   <div className="flex items-start">
                     <div className="flex-shrink-0">
-                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                        <svg className="w-5 h-5 text-blue-700" fill="currentColor" viewBox="0 0 20 20">
+                      <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                        <svg className="w-5 h-5 text-yellow-700" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
                       </div>
@@ -113,27 +113,27 @@ export default async function HomePage() {
                   width={600}
                   height={400}
                 />
-                <div className="absolute inset-0 bg-blue-700 bg-opacity-10 rounded-lg"></div>
+                <div className="absolute inset-0 bg-yellow-700 bg-opacity-10 rounded-lg"></div>
               </div>
             </div>
           </div>
         </section>
 
         {/* Contact Section */}
-        <section className="py-16 bg-blue-700">
+        <section className="py-16 bg-yellow-700">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                 ¿Listo para encontrar tu hogar ideal?
               </h2>
-              <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+              <p className="text-xl text-yellow-100 mb-8 max-w-2xl mx-auto">
                 Contáctanos hoy mismo y te ayudaremos a encontrar la propiedad perfecta para ti
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <a
                   href="tel:+507-6273-5027"
-                  className="inline-flex items-center px-6 py-3 border-2 border-white text-white font-medium rounded-lg hover:bg-white hover:text-blue-700 transition-all duration-200"
+                  className="inline-flex items-center px-6 py-3 border-2 border-white text-white font-medium rounded-lg hover:bg-white hover:text-yellow-700 transition-all duration-200"
                 >
                   <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
@@ -153,7 +153,7 @@ export default async function HomePage() {
                 
                 <a
                   href="/contact"
-                  className="inline-flex items-center px-6 py-3 bg-white text-blue-700 font-medium rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                  className="inline-flex items-center px-6 py-3 bg-white text-yellow-700 font-medium rounded-lg hover:bg-gray-50 transition-colors duration-200"
                 >
                   Formulario de Contacto
                 </a>

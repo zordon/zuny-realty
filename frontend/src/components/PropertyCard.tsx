@@ -63,7 +63,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
           <div className="absolute top-4 left-4">
             <span className={`px-3 py-1 text-xs font-semibold rounded-full ${
               property.propertyType === PropertyType.SALE 
-                ? 'bg-blue-600 text-white' 
+                ? 'bg-yellow-600 text-white' 
                 : 'bg-green-600 text-white'
             }`}>
               {getPropertyTypeLabel(property.propertyType)}
@@ -71,7 +71,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
           </div>
           {property.isFeatured && (
             <div className="absolute top-4 right-4">
-              <span className="bg-yellow-500 text-white px-2 py-1 text-xs font-semibold rounded-full">
+                                <span className="bg-red-500 text-white px-2 py-1 text-xs font-semibold rounded-full">
                 Destacado
               </span>
             </div>
@@ -81,7 +81,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
       
       <div className="p-6">
         <Link href={`/property/${property.documentId}`}>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2 hover:text-blue-700 transition-colors line-clamp-2">
+                        <h3 className="text-xl font-semibold text-gray-900 mb-2 hover:text-yellow-700 transition-colors line-clamp-2">
             {property.title}
           </h3>
         </Link>
@@ -93,7 +93,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
           {property.address}
         </p>
         
-        <p className="text-2xl font-bold text-blue-700 mb-4">
+                      <p className="text-2xl font-bold text-yellow-700 mb-4">
           {formatPrice(property.price, property.currency)}
           {property.propertyType === PropertyType.RENT && (
             <span className="text-sm font-normal text-gray-500">/mes</span>
@@ -132,7 +132,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
           </div>
           <Link 
             href={`/property/${property.documentId}`}
-            className="bg-blue-700 hover:bg-blue-800 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-sm"
+                          className="bg-yellow-700 hover:bg-yellow-800 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-sm"
           >
             Ver Detalles
           </Link>

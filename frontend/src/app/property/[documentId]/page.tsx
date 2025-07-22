@@ -84,7 +84,7 @@ export default async function PropertyDetailPage({
               {property.address}
             </p>
 
-            <div className="text-4xl font-bold text-blue-700 mb-6">
+            <div className="text-4xl font-bold text-yellow-700 mb-6">
               {formatPrice(property.price, property.currency)}
               {property.propertyType === PropertyType.RENT && (
                 <span className="text-lg font-normal text-gray-500">/mes</span>
@@ -92,23 +92,23 @@ export default async function PropertyDetailPage({
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8 text-center">
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <p className="text-sm text-blue-600 font-semibold">
+              <div className="bg-yellow-50 p-4 rounded-lg">
+                <p className="text-sm text-yellow-600 font-semibold">
                   Habitaciones
                 </p>
-                <p className="text-2xl text-blue-800 font-bold">
+                <p className="text-2xl text-yellow-800 font-bold">
                   {property.bedrooms}
                 </p>
               </div>
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <p className="text-sm text-blue-600 font-semibold">Baños</p>
-                <p className="text-2xl text-blue-800 font-bold">
+                        <div className="bg-yellow-50 p-4 rounded-lg">
+            <p className="text-sm text-yellow-600 font-semibold">Baños</p>
+            <p className="text-2xl text-yellow-800 font-bold">
                   {property.bathrooms}
                 </p>
               </div>
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <p className="text-sm text-blue-600 font-semibold">Área (m²)</p>
-                <p className="text-2xl text-blue-800 font-bold">
+                        <div className="bg-yellow-50 p-4 rounded-lg">
+            <p className="text-sm text-yellow-600 font-semibold">Área (m²)</p>
+            <p className="text-2xl text-yellow-800 font-bold">
                   {property.areaSqFt}
                 </p>
               </div>
@@ -149,7 +149,7 @@ export default async function PropertyDetailPage({
                       className="flex items-center text-gray-700"
                     >
                       <svg
-                        className="w-5 h-5 mr-2 text-blue-600 flex-shrink-0"
+                        className="w-5 h-5 mr-2 text-yellow-600 flex-shrink-0"
                         fill="currentColor"
                         viewBox="0 0 20 20"
                       >
@@ -188,7 +188,7 @@ export default async function PropertyDetailPage({
                         Teléfono:{" "}
                         <a
                           href={`tel:${property.agentPhone}`}
-                          className="text-blue-600 hover:underline"
+                          className="text-yellow-600 hover:underline"
                         >
                           {property.agentPhone}
                         </a>
@@ -199,7 +199,7 @@ export default async function PropertyDetailPage({
                         Email:{" "}
                         <a
                           href={`mailto:${property.agentEmail}`}
-                          className="text-blue-600 hover:underline"
+                          className="text-yellow-600 hover:underline"
                         >
                           {property.agentEmail}
                         </a>

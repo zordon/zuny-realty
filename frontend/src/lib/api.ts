@@ -100,9 +100,49 @@ const mapStrapiDataToProperty = (item: StrapiPropertyDataItem): Property | null 
   };
 };
 
-export async function fetchProperties(): Promise<Property[]> {
+export interface PropertySearchParams {
+  q?: string;           // General search query
+  propertyType?: string; // 'sale' | 'rent'
+  minBedrooms?: number; // Minimum bedrooms
+  maxPrice?: number;    // Maximum price
+  minPrice?: number;    // Minimum price
+}
+
+export async function fetchProperties(searchParams?: PropertySearchParams): Promise<Property[]> {
   try {
-    const response = await fetch(`${api.baseURL}${api.endpoints.properties}?populate=*`, {
+    const url = new URL(`${api.baseURL}${api.endpoints.properties}`);
+    url.searchParams.append('populate', '*');
+    
+    // Add search parameters if provided
+    if (searchParams) {
+      // General search across title, address, and description
+      if (searchParams.q) {
+        url.searchParams.append('filters[$or][0][title][$containsi]', searchParams.q);
+        url.searchParams.append('filters[$or][1][address][$containsi]', searchParams.q);
+        url.searchParams.append('filters[$or][2][description][$containsi]', searchParams.q);
+      }
+      
+      // Property type filter
+      if (searchParams.propertyType) {
+        url.searchParams.append('filters[propertyType][$eq]', searchParams.propertyType);
+      }
+      
+      // Bedrooms filter (minimum)
+      if (searchParams.minBedrooms) {
+        url.searchParams.append('filters[bedrooms][$gte]', searchParams.minBedrooms.toString());
+      }
+      
+      // Price range filters
+      if (searchParams.maxPrice) {
+        url.searchParams.append('filters[price][$lte]', searchParams.maxPrice.toString());
+      }
+      
+      if (searchParams.minPrice) {
+        url.searchParams.append('filters[price][$gte]', searchParams.minPrice.toString());
+      }
+    }
+    
+    const response = await fetch(url.toString(), {
       headers: api.headers,
     });
     if (!response.ok) {

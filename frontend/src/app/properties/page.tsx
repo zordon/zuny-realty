@@ -7,37 +7,40 @@ import { fetchProperties, PropertySearchParams } from '@/lib/api'
 import PropertyFiltersAndList from '@/components/PropertyFiltersAndList'; // Import the new component
 
 interface PropertiesPageProps {
-  searchParams: { [key: string]: string | string[] | undefined }
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 export default async function PropertiesPage({ searchParams }: PropertiesPageProps) {
+  // Await search parameters
+  const resolvedSearchParams = await searchParams
+  
   // Parse search parameters
   const searchParamsForAPI: PropertySearchParams = {}
   
-  if (searchParams.q && typeof searchParams.q === 'string') {
-    searchParamsForAPI.q = searchParams.q
+  if (resolvedSearchParams.q && typeof resolvedSearchParams.q === 'string') {
+    searchParamsForAPI.q = resolvedSearchParams.q
   }
   
-  if (searchParams.propertyType && typeof searchParams.propertyType === 'string') {
-    searchParamsForAPI.propertyType = searchParams.propertyType
+  if (resolvedSearchParams.propertyType && typeof resolvedSearchParams.propertyType === 'string') {
+    searchParamsForAPI.propertyType = resolvedSearchParams.propertyType
   }
   
-  if (searchParams.minBedrooms && typeof searchParams.minBedrooms === 'string') {
-    const minBedrooms = parseInt(searchParams.minBedrooms, 10)
+  if (resolvedSearchParams.minBedrooms && typeof resolvedSearchParams.minBedrooms === 'string') {
+    const minBedrooms = parseInt(resolvedSearchParams.minBedrooms, 10)
     if (!isNaN(minBedrooms)) {
       searchParamsForAPI.minBedrooms = minBedrooms
     }
   }
   
-  if (searchParams.minPrice && typeof searchParams.minPrice === 'string') {
-    const minPrice = parseInt(searchParams.minPrice, 10)
+  if (resolvedSearchParams.minPrice && typeof resolvedSearchParams.minPrice === 'string') {
+    const minPrice = parseInt(resolvedSearchParams.minPrice, 10)
     if (!isNaN(minPrice)) {
       searchParamsForAPI.minPrice = minPrice
     }
   }
   
-  if (searchParams.maxPrice && typeof searchParams.maxPrice === 'string') {
-    const maxPrice = parseInt(searchParams.maxPrice, 10)
+  if (resolvedSearchParams.maxPrice && typeof resolvedSearchParams.maxPrice === 'string') {
+    const maxPrice = parseInt(resolvedSearchParams.maxPrice, 10)
     if (!isNaN(maxPrice)) {
       searchParamsForAPI.maxPrice = maxPrice
     }
@@ -67,7 +70,7 @@ export default async function PropertiesPage({ searchParams }: PropertiesPagePro
               <div className="flex flex-wrap justify-center gap-2 text-sm">
                 {searchParamsForAPI.q && (
                   <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full">
-                    "{searchParamsForAPI.q}"
+                    &quot;{searchParamsForAPI.q}&quot;
                   </span>
                 )}
                 {searchParamsForAPI.propertyType && (

@@ -6,6 +6,9 @@ import { Property } from '@/types'
 import { fetchProperties, PropertySearchParams } from '@/lib/api'
 import PropertyFiltersAndList from '@/components/PropertyFiltersAndList'; // Import the new component
 
+// Force dynamic rendering for this page since it uses searchParams
+export const dynamic = 'force-dynamic'
+
 interface PropertiesPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }

@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "workspaces": [
     "frontend",
-    "backend"
+    "backend",
+    "scripts/property-ingestion"
   ],
   "scripts": {
     "dev": "yarn workspace frontend dev",
@@ -16,7 +17,12 @@
     "backend:debug": "DEBUG=\"strapi:*\" yarn workspace backend node --inspect ../node_modules/@strapi/strapi/bin/strapi.js develop",
     "cf:preview": "yarn workspace frontend preview",
     "cf:deploy": "yarn workspace frontend deploy",
-    "cf:typegen": "yarn workspace frontend cf-typegen"
+    "cf:typegen": "yarn workspace frontend cf-typegen",
+    "property:install": "yarn workspace property-ingestion install",
+    "property:setup": "yarn workspace property-ingestion setup",
+    "property:examples": "yarn workspace property-ingestion examples",
+    "property:demo": "yarn workspace property-ingestion demo:features",
+    "property:debug": "yarn workspace property-ingestion debug:strapi"
   },
   "dependencies": {
     "esbuild": "^0.25.4"

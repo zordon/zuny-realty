@@ -18573,6 +18573,7 @@ __metadata:
     axios: "npm:^1.6.0"
     cheerio: "npm:^1.0.0-rc.12"
     dotenv: "npm:^16.3.1"
+    form-data: "npm:^4.0.0"
   languageName: unknown
   linkType: soft
 

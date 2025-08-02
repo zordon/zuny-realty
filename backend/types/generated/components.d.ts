@@ -9,9 +9,6 @@ export interface CharacteristicCharacteristic extends Struct.ComponentSchema {
   };
   attributes: {
     isWidget: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
-    key: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.Unique;
     label: Schema.Attribute.String & Schema.Attribute.Required;
     prefix: Schema.Attribute.String;
     suffix: Schema.Attribute.String;

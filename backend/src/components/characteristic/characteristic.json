@@ -20,11 +20,6 @@
     "prefix": {
       "type": "string"
     },
-    "key": {
-      "type": "string",
-      "required": true,
-      "unique": true
-    },
     "isWidget": {
       "type": "boolean",
       "default": false

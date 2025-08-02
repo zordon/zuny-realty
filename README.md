@@ -153,7 +153,7 @@ yarn build
 ## 📞 Contact Information
 
 **Zuny Real Estate**
-- Phone: +507 6273-5027
+- Phone: +507 6617-7498
 - Email: admin@zunyrealty.com
 - Location: San Francisco, Ciudad de Panamá
 

@@ -19,10 +19,10 @@ export default function ContactPage() {
             <div>
               <h2 className="text-xl font-semibold text-gray-800 mb-3">Información de Contacto</h2>
               <p className="text-gray-700 mb-2">
-                <strong className="font-medium">Teléfono:</strong> <a href="tel:+50762735027" className="text-blue-600 hover:underline">+507 6273-5027</a>
+                <strong className="font-medium">Teléfono:</strong> <a href="tel:+50766177498" className="text-yellow-600 hover:underline">+507 6617-7498</a>
               </p>
               <p className="text-gray-700 mb-2">
-                <strong className="font-medium">Email:</strong> <a href="mailto:admin@zunyrealty.com" className="text-blue-600 hover:underline">admin@zunyrealty.com</a>
+                <strong className="font-medium">Email:</strong> <a href="mailto:admin@zunyrealty.com" className="text-yellow-600 hover:underline">admin@zunyrealty.com</a>
               </p>
               <p className="text-gray-700 mb-2">
                 <strong className="font-medium">Dirección:</strong> Ciudad de Panamá, Panamá (Por favor, contáctanos para agendar una cita)

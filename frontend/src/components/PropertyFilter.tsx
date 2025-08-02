@@ -25,7 +25,7 @@ const PropertyFilter: React.FC<PropertyFilterProps> = ({ currentFilter, onFilter
           onClick={() => onFilterChange(option.value)}
           className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200
             ${currentFilter === option.value 
-              ? 'bg-blue-600 text-white shadow-md' 
+              ? 'bg-yellow-600 text-white shadow-md' 
               : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
             }`}
         >

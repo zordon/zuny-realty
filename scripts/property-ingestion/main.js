@@ -7,12 +7,120 @@ const cheerio = require('cheerio');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const CONFIG_FILE = require('./config');
 
+// Simple fuzzy matching function
+function calculateSimilarity(str1, str2) {
+  const a = str1.toLowerCase();
+  const b = str2.toLowerCase();
+  
+  if (a === b) return 1;
+  
+  // Levenshtein distance implementation
+  const matrix = Array(b.length + 1).fill(null).map(() => Array(a.length + 1).fill(null));
+  
+  for (let i = 0; i <= a.length; i++) matrix[0][i] = i;
+  for (let j = 0; j <= b.length; j++) matrix[j][0] = j;
+  
+  for (let j = 1; j <= b.length; j++) {
+    for (let i = 1; i <= a.length; i++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      matrix[j][i] = Math.min(
+        matrix[j][i - 1] + 1,     // insertion
+        matrix[j - 1][i] + 1,     // deletion
+        matrix[j - 1][i - 1] + cost // substitution
+      );
+    }
+  }
+  
+  const maxLength = Math.max(a.length, b.length);
+  const distance = matrix[b.length][a.length];
+  return (maxLength - distance) / maxLength;
+}
+
+// Predefined category mapping
+const CATEGORY_MAPPING = {
+  // Spanish variations to standard categories
+  'apartamento': 'apartamentos',
+  'apartamentos': 'apartamentos',
+  'apart': 'apartamentos',
+  'depto': 'apartamentos',
+  'departamento': 'apartamentos',
+  'departamentos': 'apartamentos',
+  'piso': 'apartamentos',
+  'pisos': 'apartamentos',
+  'condominio': 'apartamentos',
+  'condominios': 'apartamentos',
+  'penthouse': 'apartamentos',
+  'loft': 'apartamentos',
+  'estudio': 'apartamentos',
+  
+  'casa': 'casas',
+  'casas': 'casas',
+  'vivienda': 'casas',
+  'viviendas': 'casas',
+  'residencia': 'casas',
+  'residencias': 'casas',
+  'chalet': 'casas',
+  'duplex': 'casas',
+  'dúplex': 'casas',
+  'villa': 'casas',
+  'villas': 'casas',
+  'townhouse': 'casas',
+  'quintas': 'casas',
+  'quinta': 'casas',
+  
+  'lote': 'lotes',
+  'lotes': 'lotes',
+  'terreno': 'lotes',
+  'terrenos': 'lotes',
+  'solar': 'lotes',
+  'solares': 'lotes',
+  'parcela': 'lotes',
+  'parcelas': 'lotes',
+  'predio': 'lotes',
+  'predios': 'lotes',
+  'lot': 'lotes',
+  'lots': 'lotes',
+  'land': 'lotes',
+  
+  'finca': 'fincas',
+  'fincas': 'fincas',
+  'hacienda': 'fincas',
+  'haciendas': 'fincas',
+  'granja': 'fincas',
+  'granjas': 'fincas',
+  'farm': 'fincas',
+  'farms': 'fincas',
+  'ranch': 'fincas',
+  'rancho': 'fincas',
+  'ranchos': 'fincas',
+  'campo': 'fincas',
+  'rural': 'fincas',
+  
+  'oficina': 'oficinas',
+  'oficinas': 'oficinas',
+  'office': 'oficinas',
+  'offices': 'oficinas',
+  'edificio': 'oficinas',
+  'edificios': 'oficinas',
+  'local': 'oficinas',
+  'locales': 'oficinas',
+  'comercial': 'oficinas',
+  'comerciales': 'oficinas',
+  'negocio': 'oficinas',
+  'negocios': 'oficinas',
+  'consultorio': 'oficinas',
+  'consultorios': 'oficinas',
+  'clinica': 'oficinas',
+  'clinicas': 'oficinas',
+  'centro': 'oficinas'
+};
+
 // Configuration
 const CONFIG = {
   STRAPI_URL: process.env.STRAPI_URL || 'http://localhost:1337',
   STRAPI_API_TOKEN: process.env.STRAPI_API_TOKEN,
   GEMINI_API_KEY: process.env.GEMINI_API_KEY,
-  DEFAULT_LOCALE: 'es',
+  DEFAULT_LOCALE: 'es-419',
   SECONDARY_LOCALE: 'en'
 };
 
@@ -21,8 +129,8 @@ const genAI = new GoogleGenerativeAI(CONFIG.GEMINI_API_KEY);
 
 class PropertyIngestionService {
   constructor() {
-    this.existingFeatures = new Map();
-    this.existingCategories = new Map();
+    this.existingFeatures = new Map(); // stores: name -> {id, documentId, locales: {es: name, en: name}}
+    this.existingCategories = new Map(); // stores: name -> {id, documentId, locales: {es: name, en: name}}
     this.strapiAPI = axios.create({
       baseURL: CONFIG.STRAPI_URL,
       headers: {
@@ -35,6 +143,7 @@ class PropertyIngestionService {
   async initialize() {
     console.log('🚀 Initializing Property Ingestion Service...');
     await this.loadExistingData();
+    await this.validateRequiredCategories();
   }
 
   async loadExistingData() {
@@ -42,27 +151,16 @@ class PropertyIngestionService {
       // Test Strapi connection first
       await this.strapiAPI.get('/api/features?pagination[pageSize]=1');
       
-      // Load existing features
-      const featuresResponse = await this.strapiAPI.get('/api/features?pagination[pageSize]=1000');
-      if (featuresResponse.data && featuresResponse.data.data) {
-        featuresResponse.data.data.forEach(feature => {
-          if (feature.attributes && feature.attributes.name) {
-            this.existingFeatures.set(feature.attributes.name.toLowerCase(), feature.id);
-          }
-        });
-        console.log(`📋 Loaded ${this.existingFeatures.size} existing features`);
-      }
+      // Load existing features from both locales
+      await this.loadFeaturesByLocale(CONFIG.DEFAULT_LOCALE);
+      await this.loadFeaturesByLocale(CONFIG.SECONDARY_LOCALE);
+      console.log(`📋 Loaded ${this.existingFeatures.size} existing features`);
 
-      // Load existing categories
-      const categoriesResponse = await this.strapiAPI.get('/api/categories?pagination[pageSize]=1000');
-      if (categoriesResponse.data && categoriesResponse.data.data) {
-        categoriesResponse.data.data.forEach(category => {
-          if (category.attributes && category.attributes.name) {
-            this.existingCategories.set(category.attributes.name.toLowerCase(), category.id);
-          }
-        });
-        console.log(`📁 Loaded ${this.existingCategories.size} existing categories`);
-      }
+      // Load existing categories from both locales
+      await this.loadCategoriesByLocale(CONFIG.DEFAULT_LOCALE);
+      await this.loadCategoriesByLocale(CONFIG.SECONDARY_LOCALE);
+      console.log(`📁 Loaded ${this.existingCategories.size} existing categories`);
+      
     } catch (error) {
       console.error('❌ Error loading existing data:', error.message);
       if (error.code === 'ECONNREFUSED') {
@@ -72,6 +170,93 @@ class PropertyIngestionService {
       }
       console.log('⚠️  Continuing without existing data (may create duplicates)');
     }
+  }
+
+  async loadFeaturesByLocale(locale) {
+    try {
+      const response = await this.strapiAPI.get(`/api/features?locale=${locale}&pagination[pageSize]=1000`);
+      if (response.data && response.data.data) {
+        response.data.data.forEach(feature => {
+          if (feature.name) {
+            const name = feature.name.toLowerCase();
+            const documentId = feature.documentId;
+            
+            if (!this.existingFeatures.has(name)) {
+              this.existingFeatures.set(name, {
+                id: feature.id,
+                documentId: documentId,
+                locales: {}
+              });
+            }
+            
+            // Store the locale-specific name
+            this.existingFeatures.get(name).locales[locale] = feature.name;
+          }
+        });
+      }
+    } catch (error) {
+      console.log(`⚠️  Could not load features for locale ${locale}:`, error.message);
+    }
+  }
+
+  async loadCategoriesByLocale(locale) {
+    try {
+      const response = await this.strapiAPI.get(`/api/categories?locale=${locale}&pagination[pageSize]=1000`);
+      if (response.data && response.data.data) {
+        response.data.data.forEach(category => {
+          if (category.name) {
+            const name = category.name.toLowerCase();
+            const documentId = category.documentId;
+            
+            if (!this.existingCategories.has(name)) {
+              this.existingCategories.set(name, {
+                id: category.id,
+                documentId: documentId,
+                locales: {}
+              });
+            }
+            
+            // Store the locale-specific name
+            this.existingCategories.get(name).locales[locale] = category.name;
+          }
+        });
+      }
+    } catch (error) {
+      console.log(`⚠️  Could not load categories for locale ${locale}:`, error.message);
+    }
+  }
+
+  // Fuzzy matching for finding existing entries
+  findBestMatch(searchTerm, existingMap, threshold = 0.8) {
+    let bestMatch = null;
+    let bestScore = 0;
+    
+    const searchWords = searchTerm.toLowerCase().trim().split(/\s+/);
+    const firstWord = searchWords[0];
+    
+    for (const [key, data] of existingMap.entries()) {
+      // Check if it starts with the first word (as requested)
+      if (key.startsWith(firstWord)) {
+        const similarity = calculateSimilarity(searchTerm.toLowerCase(), key);
+        if (similarity > bestScore && similarity >= threshold) {
+          bestScore = similarity;
+          bestMatch = { key, data, similarity };
+        }
+      }
+    }
+    
+    // If no good match starting with first word, try general fuzzy matching
+    if (!bestMatch) {
+      for (const [key, data] of existingMap.entries()) {
+        const similarity = calculateSimilarity(searchTerm.toLowerCase(), key);
+        if (similarity > bestScore && similarity >= threshold) {
+          bestScore = similarity;
+          bestMatch = { key, data, similarity };
+        }
+      }
+    }
+    
+    return bestMatch;
   }
 
   async processPropertySource(source) {
@@ -138,11 +323,11 @@ Analyze this real estate property data and extract structured information. Retur
   "bedrooms": 0,
   "bathrooms": 0,
   "propertyType": "sale" or "rent",
-  "category": "apartment", "house", "duplex", "lot", etc.,
+  "category": "apartamentos", "casas", "lotes", "fincas", or "oficinas",
   "features": ["feature1", "feature2", ...],
   "characteristics": [
-    {"key": "area", "label": "Área", "value": "114", "suffix": "m²"},
-    {"key": "parking", "label": "Estacionamiento", "value": "1", "suffix": "espacios"}
+    {"label": "Área", "value": "114", "suffix": "m²"},
+    {"label": "Estacionamiento", "value": "1", "suffix": "espacios"}
   ],
   "location": {
     "neighborhood": "neighborhood name",
@@ -154,13 +339,22 @@ Analyze this real estate property data and extract structured information. Retur
 Property Data:
 ${typeof rawData === 'object' ? JSON.stringify(rawData, null, 2) : rawData}
 
-Important:
+IMPORTANT CATEGORY CLASSIFICATION:
+- "apartamentos": Any apartment, condo, departamento, penthouse, loft, studio, or unit in a building
+- "casas": Any house, villa, duplex, townhouse, chalet, or standalone residential building
+- "lotes": Any lot, land, terreno, solar, parcela, or undeveloped property for building
+- "fincas": Any farm, ranch, hacienda, granja, or large rural property with agricultural use
+- "oficinas": Any office, commercial space, local, edificio, consultorio, clinic, or business premises
+
+Other requirements:
 - Extract exact numbers for price, bedrooms, bathrooms
 - Identify property type (sale/rent) from context
 - Extract all features/amenities mentioned
-- Create characteristics for measurable attributes
+- Create characteristics for measurable attributes (without "key" field - only use label, value, suffix)
 - Be precise with location details
 - Currency should be USD or PAB (Panamanian Balboa)
+- MUST use one of the 5 categories: apartamentos, casas, lotes, fincas, or oficinas
+- Beautify the description
 `;
 
       const result = await model.generateContent(prompt);
@@ -231,6 +425,12 @@ Return the translated JSON with English text while preserving all numbers, struc
       // Process features
       const featureIds = await this.getOrCreateFeatures(spanishData.features, englishData.features);
 
+      // Process characteristics to remove 'key' field (since it's been removed from Strapi schema)
+      const processedCharacteristics = (spanishData.characteristics || []).map(char => {
+        const { key, ...characteristicWithoutKey } = char;
+        return characteristicWithoutKey;
+      });
+
       // Create Spanish property first (default locale)
       const propertyPayload = {
         data: {
@@ -244,9 +444,9 @@ Return the translated JSON with English text while preserving all numbers, struc
           propertyType: spanishData.propertyType,
           category: categoryId,
           features: featureIds,
-          characteristics: spanishData.characteristics || [],
+          characteristics: processedCharacteristics,
           isFeatured: false,
-          locale: 'es',
+          locale: CONFIG.DEFAULT_LOCALE,
           publishedAt: new Date().toISOString()
         }
       };
@@ -256,10 +456,17 @@ Return the translated JSON with English text while preserving all numbers, struc
       // Create property in Strapi
       const response = await this.strapiAPI.post('/api/properties', propertyPayload);
       const propertyId = response.data.data.id;
-      console.log('✅ Property created successfully with ID:', propertyId);
+      const documentId = response.data.data.documentId;
+      console.log('✅ Property created successfully with ID:', propertyId, 'DocumentId:', documentId);
 
-      // Create English localization
+      // Create English localization using correct Strapi v5 API
       try {
+        // Process English characteristics to remove 'key' field
+        const processedEnglishCharacteristics = (englishData.characteristics || []).map(char => {
+          const { key, ...characteristicWithoutKey } = char;
+          return characteristicWithoutKey;
+        });
+
         const englishPayload = {
           data: {
             title: englishData.title,
@@ -272,16 +479,17 @@ Return the translated JSON with English text while preserving all numbers, struc
             propertyType: spanishData.propertyType, // Keep same type
             category: categoryId, // Keep same category
             features: featureIds, // Keep same features
-            characteristics: englishData.characteristics || [],
-            isFeatured: false,
-            locale: 'en'
+            characteristics: processedEnglishCharacteristics,
+            isFeatured: false
           }
         };
         
-        await this.strapiAPI.post(`/api/properties/${propertyId}/localizations`, englishPayload);
+        // Use correct Strapi v5 locale API
+        await this.strapiAPI.put(`/api/properties/${documentId}?locale=${CONFIG.SECONDARY_LOCALE}`, englishPayload);
         console.log('✅ Added English localization for property');
       } catch (localizationError) {
         console.log(`⚠️  Created property but failed to add English localization: ${localizationError.message}`);
+        console.log('📋 Localization error details:', localizationError.response?.data);
       }
 
       return response.data.data;
@@ -292,55 +500,82 @@ Return the translated JSON with English text while preserving all numbers, struc
   }
 
   async getOrCreateCategory(spanishName, englishName) {
-    const key = spanishName.toLowerCase();
-
-    if (this.existingCategories.has(key)) {
-      return this.existingCategories.get(key);
+    // Normalize the category name using predefined mapping
+    const normalizedCategory = this.normalizeCategoryName(spanishName);
+    
+    if (!normalizedCategory) {
+      console.log(`⚠️  Unknown category "${spanishName}", defaulting to "casas"`);
+      const defaultCategory = 'casas';
+      return this.findCategoryId(defaultCategory);
     }
-
-    try {
-      // Create Spanish version first (default locale)
-      const slug = spanishName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-      
-      const categoryPayload = {
-        data: {
-          name: spanishName,
-          slug: slug,
-          locale: 'es'
-        }
-      };
-
-      console.log('🔍 Creating category with payload:', JSON.stringify(categoryPayload, null, 2));
-      const response = await this.strapiAPI.post('/api/categories', categoryPayload);
-      const categoryId = response.data.data.id;
-      
-      // Create English localization
-      try {
-        const englishSlug = englishName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-        const englishPayload = {
-          data: {
-            name: englishName,
-            slug: englishSlug,
-            locale: 'en'
-          }
-        };
-        
-        await this.strapiAPI.post(`/api/categories/${categoryId}/localizations`, englishPayload);
-        console.log(`📁 Created category with localizations: ${spanishName} (${englishName})`);
-      } catch (localizationError) {
-        console.log(`⚠️  Created category but failed to add English localization: ${localizationError.message}`);
-      }
-
-      this.existingCategories.set(key, categoryId);
-      return categoryId;
-    } catch (error) {
-      console.error('❌ Error creating category:', error.message);
-      if (error.response?.data) {
-        console.error('📋 Error details:', JSON.stringify(error.response.data, null, 2));
-      }
-      throw error;
-    }
+    
+    console.log(`🔍 Mapped category: ${spanishName} → ${normalizedCategory}`);
+    return this.findCategoryId(normalizedCategory);
   }
+
+  normalizeCategoryName(categoryName) {
+    const normalized = categoryName.toLowerCase().trim();
+    
+    // Check direct mapping first
+    if (CATEGORY_MAPPING[normalized]) {
+      return CATEGORY_MAPPING[normalized];
+    }
+    
+    // Check if any key contains the category name or vice versa
+    for (const [key, value] of Object.entries(CATEGORY_MAPPING)) {
+      if (key.includes(normalized) || normalized.includes(key)) {
+        return value;
+      }
+    }
+    
+    // Fuzzy matching for category mapping
+    let bestMatch = null;
+    let bestScore = 0;
+    
+    for (const [key, value] of Object.entries(CATEGORY_MAPPING)) {
+      const similarity = calculateSimilarity(normalized, key);
+      if (similarity > bestScore && similarity >= 0.7) {
+        bestScore = similarity;
+        bestMatch = value;
+      }
+    }
+    
+    return bestMatch;
+  }
+
+  findCategoryId(categoryName) {
+    // Find the category ID from loaded categories
+    const categoryData = this.existingCategories.get(categoryName.toLowerCase());
+    
+    if (!categoryData) {
+      console.error(`❌ Category "${categoryName}" not found in Strapi. Please ensure all 5 categories are created: apartamentos, casas, lotes, fincas, oficinas`);
+      throw new Error(`Category "${categoryName}" not found. Please create it in Strapi first.`);
+    }
+    
+    return categoryData.id;
+  }
+
+  async validateRequiredCategories() {
+    const requiredCategories = ['apartamentos', 'casas', 'lotes', 'fincas', 'oficinas'];
+    const missingCategories = [];
+    
+    for (const category of requiredCategories) {
+      if (!this.existingCategories.has(category)) {
+        missingCategories.push(category);
+      }
+    }
+    
+    if (missingCategories.length > 0) {
+      console.error('❌ Missing required categories in Strapi:', missingCategories.join(', '), 'returned from Strapi API', this.existingCategories);
+      console.error('💡 Please create these categories with both Spanish and English localizations first');
+      throw new Error(`Missing required categories: ${missingCategories.join(', ')}`);
+    }
+    
+    console.log('✅ All required categories found:', requiredCategories.join(', '));
+  }
+
+  // Note: Categories must be pre-created in Strapi with both Spanish and English localizations:
+  // apartamentos/apartments, casas/houses, lotes/lots, fincas/farms, oficinas/offices
 
   async getOrCreateFeatures(spanishFeatures, englishFeatures) {
     const featureIds = [];
@@ -356,38 +591,44 @@ Return the translated JSON with English text while preserving all numbers, struc
         console.log(`🔄 Using predefined mapping: ${spanishFeature} → ${englishFeature}`);
       }
       
-      const key = featureLowerCase;
-
-      if (this.existingFeatures.has(key)) {
-        featureIds.push(this.existingFeatures.get(key));
+      // Try fuzzy matching first
+      const bestMatch = this.findBestMatch(spanishFeature, this.existingFeatures, 0.8);
+      
+      if (bestMatch) {
+        console.log(`🔍 Found existing feature: ${spanishFeature} matches ${bestMatch.key} (similarity: ${bestMatch.similarity.toFixed(2)})`);
+        
+              // Check if English translation exists
+      if (!bestMatch.data.locales[CONFIG.SECONDARY_LOCALE]) {
+        console.log(`🌐 Adding missing English translation for feature: ${englishFeature}`);
+        await this.addFeatureTranslation(bestMatch.data.documentId, englishFeature);
+      }
+        
+        featureIds.push(bestMatch.data.id);
       } else {
         try {
-          // Create Spanish version first (default locale)
+          // Create new Spanish feature (default locale)
           const featurePayload = {
             data: {
               name: spanishFeature,
-              locale: 'es'
+              locale: CONFIG.DEFAULT_LOCALE
             }
           };
 
           const response = await this.strapiAPI.post('/api/features', featurePayload);
           const featureId = response.data.data.id;
+          const documentId = response.data.data.documentId;
           
-          // Create English localization
-          try {
-            const englishPayload = {
-              data: {
-                name: englishFeature,
-                locale: 'en'
-              }
-            };
-            
-            await this.strapiAPI.post(`/api/features/${featureId}/localizations`, englishPayload);
-          } catch (localizationError) {
-            console.log(`⚠️  Created feature but failed to add English localization: ${localizationError.message}`);
-          }
-
-          this.existingFeatures.set(key, featureId);
+          // Add to cache
+          const key = featureLowerCase;
+          this.existingFeatures.set(key, {
+            id: featureId,
+            documentId: documentId,
+            locales: { [CONFIG.DEFAULT_LOCALE]: spanishFeature }
+          });
+          
+          // Create English localization using correct API
+          await this.addFeatureTranslation(documentId, englishFeature);
+          
           featureIds.push(featureId);
           console.log(`📋 Created new feature: ${spanishFeature} (${englishFeature})`);
         } catch (error) {
@@ -400,6 +641,20 @@ Return the translated JSON with English text while preserving all numbers, struc
     }
 
     return featureIds;
+  }
+
+  async addFeatureTranslation(documentId, englishName) {
+    try {
+      const englishPayload = {
+        data: {
+          name: englishName
+        }
+      };
+      
+      await this.strapiAPI.put(`/api/features/${documentId}?locale=${CONFIG.SECONDARY_LOCALE}`, englishPayload);
+    } catch (localizationError) {
+      console.log(`⚠️  Failed to add English translation for feature: ${localizationError.message}`);
+    }
   }
 
   async batchProcess(sources) {

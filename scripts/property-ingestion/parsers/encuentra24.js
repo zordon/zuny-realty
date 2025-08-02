@@ -111,7 +111,6 @@ class Encuentra24Parser {
     const area = this.extractArea($);
     if (area) {
       characteristics.push({
-        key: 'area',
         label: 'Área',
         value: area.toString(),
         suffix: 'm²'
@@ -123,7 +122,6 @@ class Encuentra24Parser {
     const parkingMatch = text.match(/(\d+)\s*(?:estacionamiento|parking)/i);
     if (parkingMatch) {
       characteristics.push({
-        key: 'parking',
         label: 'Estacionamiento',
         value: parkingMatch[1],
         suffix: 'espacios'
@@ -134,7 +132,6 @@ class Encuentra24Parser {
     const floorMatch = text.match(/piso\s*(\d+)/i);
     if (floorMatch) {
       characteristics.push({
-        key: 'floor',
         label: 'Piso',
         value: floorMatch[1],
         suffix: ''

@@ -9,10 +9,9 @@ import { Dictionary } from '@/lib/dictionaries'
 interface PropertyCardProps {
   property: Property
   dict?: Dictionary
-  lang?: 'en' | 'es'
 }
 
-const PropertyCard: React.FC<PropertyCardProps> = ({ property, dict, lang }) => {
+const PropertyCard: React.FC<PropertyCardProps> = ({ property, dict }) => {
   const formatPrice = (price: number, currency: string) => {
     return new Intl.NumberFormat('en-US', { 
       style: 'currency', 

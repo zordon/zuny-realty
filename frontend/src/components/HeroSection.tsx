@@ -10,7 +10,7 @@ interface HeroSectionProps {
   lang: 'en' | 'es';
 }
 
-const HeroSection: React.FC<HeroSectionProps> = ({ dict, lang }) => {
+const HeroSection: React.FC<HeroSectionProps> = ({ dict }) => {
 
   return (
     <section className="relative bg-gradient-to-r from-blue-900 via-blue-800 to-blue-700 min-h-[600px] flex items-center">
@@ -37,7 +37,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ dict, lang }) => {
           </h1>
           
                     {/* Search Form */}
-          <SearchForm variant="hero" dict={dict} lang={lang} />
+          <SearchForm variant="hero" dict={dict} />
         </div>
       </div>
 

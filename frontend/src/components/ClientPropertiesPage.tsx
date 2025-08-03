@@ -21,7 +21,6 @@ export default function ClientPropertiesPage({ allProperties, dict, lang }: Clie
   const [currentPage, setCurrentPage] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
-  const [totalProperties, setTotalProperties] = useState(allProperties.length)
   
   // Parse search parameters from URL
   const searchParamsForAPI = useMemo(() => {
@@ -107,7 +106,6 @@ export default function ClientPropertiesPage({ allProperties, dict, lang }: Clie
     setDisplayedProperties(filtered)
     setCurrentPage(1)
     setHasMore(filtered.length > 0)
-    setTotalProperties(filtered.length)
   }, [allProperties, searchParamsForAPI])
 
   const hasActiveFilters = Object.keys(searchParamsForAPI).length > 0
@@ -199,14 +197,13 @@ export default function ClientPropertiesPage({ allProperties, dict, lang }: Clie
         initialData={initialSearchData}
         className="mb-8"
         dict={dict}
-        lang={lang}
       />
 
       {/* Properties Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {displayedProperties.length > 0 ? (
           displayedProperties.map((property: Property) => (
-            <PropertyCard key={property.id} property={property} dict={dict} lang={lang} />
+            <PropertyCard key={property.id} property={property} dict={dict} />
           ))
         ) : (
           <p className="text-center text-gray-600 md:col-span-2 lg:col-span-3">

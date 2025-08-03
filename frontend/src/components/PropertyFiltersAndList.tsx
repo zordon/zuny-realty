@@ -24,8 +24,7 @@ export default function PropertyFiltersAndList({
   initialMinBedrooms,
   initialMinPrice,
   initialMaxPrice,
-  dict,
-  lang
+  dict
 }: PropertyFiltersAndListProps) {
   
   const initialSearchData: Partial<SearchFormData> = {
@@ -44,14 +43,13 @@ export default function PropertyFiltersAndList({
         initialData={initialSearchData}
         className="mb-8"
         dict={dict}
-        lang={lang}
       />
 
       {/* Properties Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {initialProperties.length > 0 ? (
           initialProperties.map((property: Property) => (
-            <PropertyCard key={property.id} property={property} dict={dict} lang={lang} />
+            <PropertyCard key={property.id} property={property} dict={dict} />
           ))
         ) : (
           <p className="text-center text-gray-600 md:col-span-2 lg:col-span-3">

@@ -1,6 +1,6 @@
 import HeroSection from '@/components/HeroSection'
 import PropertyCard from '@/components/PropertyCard'
-import { Property } from '@/types'
+
 import { fetchFeaturedProperties } from '@/lib/api'
 import { getDictionary, getStrapiLocale } from '@/lib/dictionaries'
 import Image from 'next/image'
@@ -35,7 +35,7 @@ export default async function HomePage({ params }: HomePageProps) {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {featuredProperties.map((property) => (
-                <PropertyCard key={property.id} property={property} dict={dict} lang={lang} />
+                <PropertyCard key={property.id} property={property} dict={dict} />
               ))}
             </div>
 

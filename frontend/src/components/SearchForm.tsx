@@ -19,7 +19,6 @@ interface SearchFormProps {
   onSearch?: (data: SearchFormData) => void
   className?: string
   dict?: Dictionary
-  lang?: 'en' | 'es'
 }
 
 export default function SearchForm({
@@ -28,8 +27,7 @@ export default function SearchForm({
   showAdvancedByDefault = false,
   onSearch,
   className = '',
-  dict,
-  lang
+  dict
 }: SearchFormProps) {
   const router = useRouter()
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(showAdvancedByDefault)

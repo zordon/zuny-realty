@@ -2,16 +2,15 @@
 
 import { Property, PropertyType, StrapiCharacteristic, StrapiImage } from "@/types";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Dictionary } from "@/lib/dictionaries";
 
 interface PropertyDetailsProps {
   property: Property;
   dict: Dictionary;
-  lang: 'en' | 'es';
 }
 
-export default function PropertyDetails({ property, dict, lang }: PropertyDetailsProps) {
+export default function PropertyDetails({ property, dict }: PropertyDetailsProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // Helper function to get image URL from either string or StrapiImage object
@@ -92,21 +91,21 @@ export default function PropertyDetails({ property, dict, lang }: PropertyDetail
   };
 
   // Image slider functions
-  const nextImage = () => {
+  const nextImage = useCallback(() => {
     if (property.images && property.images.length > 0) {
       setCurrentImageIndex((prev) => 
         prev === property.images.length - 1 ? 0 : prev + 1
       );
     }
-  };
+  }, [property.images]);
 
-  const prevImage = () => {
+  const prevImage = useCallback(() => {
     if (property.images && property.images.length > 0) {
       setCurrentImageIndex((prev) => 
         prev === 0 ? property.images.length - 1 : prev - 1
       );
     }
-  };
+  }, [property.images]);
 
   const goToImage = (index: number) => {
     setCurrentImageIndex(index);
@@ -124,7 +123,7 @@ export default function PropertyDetails({ property, dict, lang }: PropertyDetail
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [property?.images]);
+  }, [property?.images, nextImage, prevImage]);
 
   // Reset image index when property changes
   useEffect(() => {

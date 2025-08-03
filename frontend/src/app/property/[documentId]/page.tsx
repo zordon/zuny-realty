@@ -57,7 +57,6 @@ export default async function PropertyDetailPage({
         <PropertyDetails 
           property={property} 
           dict={dict} 
-          lang={lang} 
         />
       </main>
       <Footer dict={dict} lang={lang} />

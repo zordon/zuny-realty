@@ -65,7 +65,7 @@ export default async function PropertyDetailPage({
 
   return (
     <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <PropertyDetails property={property} dict={dict} lang={lang} />
+      <PropertyDetails property={property} dict={dict} />
     </main>
   );
 }

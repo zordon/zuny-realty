@@ -1,34 +1,35 @@
 {
-  "name": "zuny-real-estate",
+  "name": "frontend",
+  "version": "0.1.0",
   "private": true,
-  "version": "1.0.0",
-  "workspaces": [
-    "frontend",
-    "backend",
-    "scripts/property-ingestion"
-  ],
   "scripts": {
-    "dev": "yarn workspace frontend dev",
-    "build": "yarn workspace frontend build",
-    "start": "yarn workspace frontend start",
-    "backend:start": "yarn workspace backend start",
-    "backend:dev": "yarn workspace backend develop",
-    "backend:build": "yarn workspace backend build",
-    "backend:debug": "DEBUG=\"strapi:*\" yarn workspace backend node --inspect ../node_modules/@strapi/strapi/bin/strapi.js develop",
-    "cf:preview": "yarn workspace frontend preview",
-    "cf:deploy": "yarn workspace frontend deploy",
-    "cf:typegen": "yarn workspace frontend cf-typegen",
-    "property:install": "yarn workspace property-ingestion install",
-    "property:setup": "yarn workspace property-ingestion setup",
-    "property:examples": "yarn workspace property-ingestion examples",
-    "property:demo": "yarn workspace property-ingestion demo:features",
-    "property:debug": "yarn workspace property-ingestion debug:strapi"
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
+    "dev": "NODE_OPTIONS='--inspect' next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "esbuild": "^0.25.4"
+    "@marsidev/react-turnstile": "^1.1.0",
+    "@opennextjs/cloudflare": "^1.1.0",
+    "i18next": "^25.2.1",
+    "next": "15.3.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-i18next": "^15.5.2"
   },
   "devDependencies": {
-    "next": "15.3.2",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.2",
+    "tailwindcss": "^4",
+    "typescript": "^5",
     "wrangler": "^4.19.1"
   },
   "packageManager": "yarn@4.9.1"

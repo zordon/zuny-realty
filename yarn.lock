@@ -13533,6 +13533,7 @@ __metadata:
     react-i18next: "npm:^15.5.2"
     tailwindcss: "npm:^4"
     typescript: "npm:^5"
+    wrangler: "npm:^4.19.1"
   languageName: unknown
   linkType: soft
 
@@ -22682,7 +22683,5 @@ __metadata:
   resolution: "zuny-real-estate@workspace:."
   dependencies:
     esbuild: "npm:^0.25.4"
-    next: "npm:15.3.2"
-    wrangler: "npm:^4.19.1"
   languageName: unknown
   linkType: soft

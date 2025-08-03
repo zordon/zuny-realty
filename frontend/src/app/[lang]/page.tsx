@@ -1,46 +1,50 @@
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
 import HeroSection from '@/components/HeroSection'
 import PropertyCard from '@/components/PropertyCard'
 import { Property } from '@/types'
 import { fetchFeaturedProperties } from '@/lib/api'
+import { getDictionary, getStrapiLocale } from '@/lib/dictionaries'
 import Image from 'next/image'
 
-export default async function HomePage() {
-  const featuredProperties: Property[] = await fetchFeaturedProperties()
+interface HomePageProps {
+  params: Promise<{ lang: 'en' | 'es' }>;
+}
+
+export default async function HomePage({ params }: HomePageProps) {
+  const { lang } = await params;
+  const [dict, featuredProperties] = await Promise.all([
+    getDictionary(lang),
+    fetchFeaturedProperties(getStrapiLocale(lang)),
+  ]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      
-      <main>
+    <main>
         {/* Hero Section */}
-        <HeroSection />
+        <HeroSection dict={dict} lang={lang} />
 
         {/* Featured Properties Section */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Inmuebles <span className="text-yellow-700">Destacados</span>
+                {dict.home.featuredTitle} <span className="text-yellow-700">{dict.home.featuredHighlight}</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Descubre nuestras propiedades más exclusivas, cuidadosamente seleccionadas para ofrecerte las mejores opciones
+                {dict.home.featuredDescription}
               </p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {featuredProperties.map((property) => (
-                <PropertyCard key={property.id} property={property} />
+                <PropertyCard key={property.id} property={property} dict={dict} lang={lang} />
               ))}
             </div>
 
             <div className="text-center mt-12">
               <a
-                href="/properties"
+                href={`/${lang}/properties`}
                 className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-yellow-700 hover:bg-yellow-800 transition-colors duration-200"
               >
-                Ver Todas las Propiedades
+                {dict.home.viewAllProperties}
                 <svg className="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
                 </svg>
@@ -55,10 +59,10 @@ export default async function HomePage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                  ¿Por qué elegirnos?
+                  {dict.home.whyChooseUs}
                 </h2>
                 <p className="text-lg text-gray-600 mb-6">
-                  Con años de experiencia en el mercado inmobiliario panameño, ofrecemos un servicio personalizado y profesional para ayudarte a encontrar la propiedad de tus sueños.
+                  {dict.home.whyChooseUsDescription}
                 </p>
                 <div className="space-y-4">
                   <div className="flex items-start">
@@ -70,8 +74,8 @@ export default async function HomePage() {
                       </div>
                     </div>
                     <div className="ml-3">
-                      <h3 className="text-lg font-medium text-gray-900">Servicio Personalizado</h3>
-                      <p className="text-gray-600">Atención individual adaptada a tus necesidades específicas</p>
+                      <h3 className="text-lg font-medium text-gray-900">{dict.home.personalizedService}</h3>
+                      <p className="text-gray-600">{dict.home.personalizedServiceDescription}</p>
                     </div>
                   </div>
                   
@@ -84,8 +88,8 @@ export default async function HomePage() {
                       </div>
                     </div>
                     <div className="ml-3">
-                      <h3 className="text-lg font-medium text-gray-900">Amplio Portafolio</h3>
-                      <p className="text-gray-600">Desde apartamentos hasta casas de playa y propiedades comerciales</p>
+                      <h3 className="text-lg font-medium text-gray-900">{dict.home.widePortfolio}</h3>
+                      <p className="text-gray-600">{dict.home.widePortfolioDescription}</p>
                     </div>
                   </div>
 
@@ -98,8 +102,8 @@ export default async function HomePage() {
                       </div>
                     </div>
                     <div className="ml-3">
-                      <h3 className="text-lg font-medium text-gray-900">Experiencia Local</h3>
-                      <p className="text-gray-600">Conocimiento profundo del mercado inmobiliario panameño</p>
+                      <h3 className="text-lg font-medium text-gray-900">{dict.home.localExperience}</h3>
+                      <p className="text-gray-600">{dict.home.localExperienceDescription}</p>
                     </div>
                   </div>
                 </div>
@@ -107,13 +111,12 @@ export default async function HomePage() {
               
               <div className="relative">
                 <Image
-                  src="/api/placeholder/600/400"
+                  src="/nrfueonrfueonrfu.webp"
                   alt="ZuR Real Estate Office"
-                  className="rounded-lg shadow-xl"
+                  className="rounded-lg shadow-xl object-cover"
                   width={600}
                   height={400}
                 />
-                <div className="absolute inset-0 bg-yellow-700 bg-opacity-10 rounded-lg"></div>
               </div>
             </div>
           </div>
@@ -124,10 +127,10 @@ export default async function HomePage() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                ¿Listo para encontrar tu hogar ideal?
+                {dict.home.readyToFind}
               </h2>
               <p className="text-xl text-yellow-100 mb-8 max-w-2xl mx-auto">
-                Contáctanos hoy mismo y te ayudaremos a encontrar la propiedad perfecta para ti
+                {dict.home.contactDescription}
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -138,11 +141,11 @@ export default async function HomePage() {
                   <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                   </svg>
-                  Llamar Ahora
+                  {dict.home.callNow}
                 </a>
                 
                 <a
-                  href="https://wa.me/50762735027"
+                  href="https://wa.me/50766177498"
                   className="inline-flex items-center px-6 py-3 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 transition-colors duration-200"
                 >
                   <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
@@ -152,18 +155,15 @@ export default async function HomePage() {
                 </a>
                 
                 <a
-                  href="/contact"
+                  href={`/${lang}/contact`}
                   className="inline-flex items-center px-6 py-3 bg-white text-yellow-700 font-medium rounded-lg hover:bg-gray-50 transition-colors duration-200"
                 >
-                  Formulario de Contacto
+                  {dict.home.contactForm}
                 </a>
               </div>
             </div>
           </div>
         </section>
       </main>
-      
-      <Footer />
-    </div>
   )
 }

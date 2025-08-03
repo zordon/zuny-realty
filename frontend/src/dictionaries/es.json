@@ -1,0 +1,157 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "properties": "Propiedades", 
+    "about": "Acerca de",
+    "contact": "Contacto"
+  },
+  "header": {
+    "tagline": "Tu hogar ideal te espera",
+    "call": "Llamar:"
+  },
+  "hero": {
+    "title": "Encuentra tu",
+    "highlight": "hogar ideal"
+  },
+  "home": {
+    "featuredTitle": "Inmuebles",
+    "featuredHighlight": "Destacados",
+    "featuredDescription": "Descubre nuestras propiedades más exclusivas, cuidadosamente seleccionadas para ofrecerte las mejores opciones",
+    "viewAllProperties": "Ver Todas las Propiedades",
+    "whyChooseUs": "¿Por qué elegirnos?",
+    "whyChooseUsDescription": "Con años de experiencia en el mercado inmobiliario panameño, ofrecemos un servicio personalizado y profesional para ayudarte a encontrar la propiedad de tus sueños.",
+    "personalizedService": "Servicio Personalizado",
+    "personalizedServiceDescription": "Atención individual adaptada a tus necesidades específicas",
+    "widePortfolio": "Amplio Portafolio",
+    "widePortfolioDescription": "Desde apartamentos hasta casas de playa y propiedades comerciales",
+    "expertAdvice": "Asesoría Experta",
+    "expertAdviceDescription": "Orientación profesional durante todo tu proceso inmobiliario",
+    "localExperience": "Experiencia Local",
+    "localExperienceDescription": "Conocimiento profundo del mercado inmobiliario panameño",
+    "readyToFind": "¿Listo para encontrar tu hogar ideal?",
+    "contactDescription": "Contáctanos hoy mismo y te ayudaremos a encontrar la propiedad perfecta para ti",
+    "callNow": "Llamar Ahora",
+    "contactForm": "Formulario de Contacto"
+  },
+  "propertyCard": {
+    "featured": "Destacado",
+    "viewDetails": "Ver Detalles"
+  },
+  "property": {
+    "bedrooms": "Habitaciones",
+    "bathrooms": "Baños", 
+    "area": "Área",
+    "type": "Tipo",
+    "forSale": "En Venta",
+    "forRent": "En Alquiler",
+    "description": "Descripción",
+    "features": "Características",
+    "agentInfo": "Información del Agente",
+    "phone": "Teléfono:",
+    "email": "Email:",
+    "perMonth": "/mes",
+    "loading": "Cargando propiedad...",
+    "notFound": "Propiedad no encontrada.",
+    "prevImage": "Imagen anterior",
+    "nextImage": "Siguiente imagen",
+    "goToImage": "Ir a imagen",
+    "thumbnail": "Miniatura"
+  },
+  "search": {
+    "label": "Buscar propiedades",
+    "placeholder": "Ubicación, precio, características...",
+    "button": "Buscar"
+  },
+  "filter": {
+    "allTypes": "Todos los tipos",
+    "propertyType": "Tipo de propiedad",
+    "house": "Casa",
+    "apartment": "Apartamento",
+    "land": "Terreno",
+    "commercial": "Comercial",
+    "advancedSearch": "Búsqueda Avanzada",
+    "any": "Cualquiera",
+    "minBedrooms": "Habitaciones mínimas",
+    "maxPrice": "Precio máximo",
+    "minPrice": "Precio mínimo"
+  },
+  "contact": {
+    "title": "Contáctanos",
+    "name": "Nombre",
+    "email": "Email",
+    "message": "Mensaje",
+    "send": "Enviar"
+  },
+  "properties": {
+    "title": "Nuestras",
+    "properties": "Propiedades",
+    "description": "Explora nuestra amplia selección de propiedades en las mejores ubicaciones de Panamá",
+    "searchResults": "Resultados de búsqueda",
+    "propertyFound": "propiedad encontrada",
+    "propertiesFound": "propiedades encontradas",
+    "forSale": "En Venta",
+    "forRent": "En Alquiler",
+    "bedrooms": "habitaciones",
+    "from": "Desde",
+    "to": "Hasta",
+    "loadMore": "Cargar Más Propiedades",
+    "loading": "Cargando...",
+    "noMoreProperties": "No hay más propiedades para cargar",
+    "noResults": "No se encontraron propiedades que coincidan con sus criterios de búsqueda."
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "noResults": "No se encontraron resultados",
+    "tryAgain": "Intentar de nuevo",
+    "loadingContent": "Cargando contenido..."
+  },
+  "searchForm": {
+    "searchProperties": "Buscar propiedades",
+    "searchPlaceholder": "Ubicación, características...",
+    "type": "Tipo",
+    "allTypes": "Todos",
+    "forSale": "En Venta",
+    "forRent": "En Alquiler",
+    "bedrooms": "Habitaciones",
+    "any": "Cualquiera",
+    "minPrice": "Precio mín.",
+    "maxPrice": "Precio máx.",
+    "noLimit": "Sin límite",
+    "searchButton": "Buscar Propiedades",
+    "clearFilters": "Limpiar Filtros"
+  },
+  "footer": {
+    "companyDescription": "Tu socio de confianza en el mercado inmobiliario panameño. Encontramos la propiedad perfecta para ti con un servicio personalizado y profesional.",
+    "quickLinks": "Enlaces Rápidos",
+    "contact": "Contacto",
+    "copyright": "© 2024 ZuR Real Estate. Todos los derechos reservados."
+  },
+  "about": {
+    "title": "Acerca de Nosotros",
+    "welcome": "Bienvenido a ZuR Real Estate. Somos un equipo dedicado de profesionales apasionados por ayudar a nuestros clientes a encontrar la propiedad perfecta en Panamá.",
+    "mission": "Nuestra misión es ofrecer un servicio excepcional, transparente y personalizado. Creemos en construir relaciones a largo plazo con nuestros clientes, basadas en la confianza y el entendimiento mutuo de sus necesidades y aspiraciones.",
+    "expertise": "Con un profundo conocimiento del mercado inmobiliario local, desde vibrantes propiedades urbanas en la Ciudad de Panamá hasta serenas casas de playa y lotes en el interior, estamos equipados para guiarlo en cada paso de su viaje inmobiliario.",
+    "values": "Nuestros Valores",
+    "integrity": "Integridad",
+    "integrityDesc": "Actuamos con honestidad y ética en todas nuestras interacciones.",
+    "professionalism": "Profesionalismo",
+    "professionalismDesc": "Nos esforzamos por la excelencia y la eficiencia en nuestro trabajo.",
+    "clientFocus": "Conocimiento del Cliente",
+    "clientFocusDesc": "Ponemos las necesidades de nuestros clientes primero, siempre.",
+    "passionForPanama": "Pasión por Panamá",
+    "passionForPanamaDesc": "Amamos este país y estamos emocionados de compartir sus oportunidades inmobiliarias.",
+    "conclusion": "Ya sea que esté buscando comprar, vender o alquilar, ZuR Real Estate está aquí para asegurar que su experiencia sea lo más fluida y exitosa posible. Contáctenos hoy para descubrir cómo podemos ayudarle."
+  },
+  "contact": {
+    "title": "Contáctanos",
+    "contactInfo": "Información de Contacto",
+    "phone": "Teléfono:",
+    "email": "Email:",
+    "address": "Dirección:",
+    "addressText": "Ciudad de Panamá, Panamá (Por favor, contáctanos para agendar una cita)",
+    "whatsapp": "WhatsApp",
+    "sendMessage": "Envíanos un Mensaje",
+    "messageDescription": "Si prefieres, puedes completar el siguiente formulario y nos pondremos en contacto contigo a la brevedad."
+  }
+}

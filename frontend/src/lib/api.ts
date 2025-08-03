@@ -44,6 +44,7 @@ const mapStrapiDataToProperty = (item: StrapiPropertyDataItem): Property | null 
     agentPhone,
     agentEmail,
     characteristics,
+    category,
   } = item;
 
   let resolvedAreaSqFt = item.areaSqFt;
@@ -68,7 +69,7 @@ const mapStrapiDataToProperty = (item: StrapiPropertyDataItem): Property | null 
     typeEnum = PropertyType.SALE;
   }
 
-  const mappedImages: string[] = rawImages ? rawImages.map((img: StrapiImage) => img.url) : [];
+  const mappedImages: (string | StrapiImage)[] = rawImages ? rawImages : [];
 
   const mappedFeatures: Feature[] = rawFeatures
     ? rawFeatures.map((feature: StrapiFeature): Feature => ({
@@ -97,6 +98,8 @@ const mapStrapiDataToProperty = (item: StrapiPropertyDataItem): Property | null 
     agentName,
     agentPhone,
     agentEmail,
+    characteristics: characteristics || [],
+    category: category || undefined,
   };
 };
 
@@ -106,12 +109,15 @@ export interface PropertySearchParams {
   minBedrooms?: number; // Minimum bedrooms
   maxPrice?: number;    // Maximum price
   minPrice?: number;    // Minimum price
+  page?: number;        // Page number for pagination
+  limit?: number;       // Number of items per page
 }
 
-export async function fetchProperties(searchParams?: PropertySearchParams): Promise<Property[]> {
+export async function fetchProperties(searchParams?: PropertySearchParams, locale: string = 'es-419'): Promise<Property[]> {
   try {
     const url = new URL(`${api.baseURL}${api.endpoints.properties}`);
     url.searchParams.append('populate', '*');
+    url.searchParams.append('locale', locale);
     
     // Add search parameters if provided
     if (searchParams) {
@@ -140,6 +146,15 @@ export async function fetchProperties(searchParams?: PropertySearchParams): Prom
       if (searchParams.minPrice) {
         url.searchParams.append('filters[price][$gte]', searchParams.minPrice.toString());
       }
+
+      // Pagination parameters
+      if (searchParams.page) {
+        url.searchParams.append('pagination[page]', searchParams.page.toString());
+      }
+      
+      if (searchParams.limit) {
+        url.searchParams.append('pagination[pageSize]', searchParams.limit.toString());
+      }
     }
     
     const response = await fetch(url.toString(), {
@@ -157,9 +172,72 @@ export async function fetchProperties(searchParams?: PropertySearchParams): Prom
   }
 }
 
-export async function fetchFeaturedProperties(): Promise<Property[]> {
+export async function fetchPropertiesWithPagination(searchParams?: PropertySearchParams, locale: string = 'es-419'): Promise<{ properties: Property[], pagination: { page: number, pageSize: number, pageCount: number, total: number } }> {
   try {
-    const response = await fetch(`${api.baseURL}${api.endpoints.featuredProperties}&populate=*`, {
+    const url = new URL(`${api.baseURL}${api.endpoints.properties}`);
+    url.searchParams.append('populate', '*');
+    url.searchParams.append('locale', locale);
+    
+    // Add search parameters if provided
+    if (searchParams) {
+      // General search across title, address, and description
+      if (searchParams.q) {
+        url.searchParams.append('filters[$or][0][title][$containsi]', searchParams.q);
+        url.searchParams.append('filters[$or][1][address][$containsi]', searchParams.q);
+        url.searchParams.append('filters[$or][2][description][$containsi]', searchParams.q);
+      }
+      
+      // Property type filter
+      if (searchParams.propertyType) {
+        url.searchParams.append('filters[propertyType][$eq]', searchParams.propertyType);
+      }
+      
+      // Bedrooms filter (minimum)
+      if (searchParams.minBedrooms) {
+        url.searchParams.append('filters[bedrooms][$gte]', searchParams.minBedrooms.toString());
+      }
+      
+      // Price range filters
+      if (searchParams.maxPrice) {
+        url.searchParams.append('filters[price][$lte]', searchParams.maxPrice.toString());
+      }
+      
+      if (searchParams.minPrice) {
+        url.searchParams.append('filters[price][$gte]', searchParams.minPrice.toString());
+      }
+
+      // Pagination parameters
+      if (searchParams.page) {
+        url.searchParams.append('pagination[page]', searchParams.page.toString());
+      }
+      
+      if (searchParams.limit) {
+        url.searchParams.append('pagination[pageSize]', searchParams.limit.toString());
+      }
+    }
+    
+    const response = await fetch(url.toString(), {
+      headers: api.headers,
+    });
+    if (!response.ok) {
+      const errorBody = await response.text();
+      throw new Error(`Failed to fetch properties: ${response.status} ${errorBody}`);
+    }
+    const data = await response.json();
+    
+    const properties = data.data ? data.data.map(mapStrapiDataToProperty).filter((p: Property | null): p is Property => p !== null) : [];
+    const pagination = data.meta?.pagination || { page: 1, pageSize: 25, pageCount: 1, total: 0 };
+    
+    return { properties, pagination };
+  } catch (error) {
+    console.error('Error fetching properties:', error);
+    return { properties: [], pagination: { page: 1, pageSize: 25, pageCount: 1, total: 0 } };
+  }
+}
+
+export async function fetchFeaturedProperties(locale: string = 'es-419'): Promise<Property[]> {
+  try {
+    const response = await fetch(`${api.baseURL}${api.endpoints.featuredProperties}&populate=*&locale=${locale}`, {
       headers: api.headers,
     });
     if (!response.ok) {
@@ -174,9 +252,9 @@ export async function fetchFeaturedProperties(): Promise<Property[]> {
   }
 }
 
-export async function fetchProperty(documentId: string): Promise<Property | null> {
+export async function fetchProperty(documentId: string, locale: string = 'es-419'): Promise<Property | null> {
   try {
-    const filterQuery = `?filters[documentId][$eq]=${encodeURIComponent(documentId)}&populate=*`;
+    const filterQuery = `?filters[documentId][$eq]=${encodeURIComponent(documentId)}&populate=*&locale=${locale}`;
     const response = await fetch(`${api.baseURL}${api.endpoints.properties}${filterQuery}`, {
       headers: api.headers,
     });

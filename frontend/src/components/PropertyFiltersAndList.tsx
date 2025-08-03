@@ -4,6 +4,7 @@ import React from 'react';
 import PropertyCard from '@/components/PropertyCard';
 import SearchForm, { SearchFormData } from '@/components/SearchForm';
 import { Property } from '@/types';
+import { Dictionary } from '@/lib/dictionaries';
 
 interface PropertyFiltersAndListProps {
   initialProperties: Property[];
@@ -12,6 +13,8 @@ interface PropertyFiltersAndListProps {
   initialMinBedrooms?: number;
   initialMinPrice?: number;
   initialMaxPrice?: number;
+  dict?: Dictionary;
+  lang?: 'en' | 'es';
 }
 
 export default function PropertyFiltersAndList({ 
@@ -20,7 +23,9 @@ export default function PropertyFiltersAndList({
   initialPropertyType = '',
   initialMinBedrooms,
   initialMinPrice,
-  initialMaxPrice
+  initialMaxPrice,
+  dict,
+  lang
 }: PropertyFiltersAndListProps) {
   
   const initialSearchData: Partial<SearchFormData> = {
@@ -38,17 +43,19 @@ export default function PropertyFiltersAndList({
         variant="filters" 
         initialData={initialSearchData}
         className="mb-8"
+        dict={dict}
+        lang={lang}
       />
 
       {/* Properties Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {initialProperties.length > 0 ? (
           initialProperties.map((property: Property) => (
-            <PropertyCard key={property.id} property={property} />
+            <PropertyCard key={property.id} property={property} dict={dict} lang={lang} />
           ))
         ) : (
           <p className="text-center text-gray-600 md:col-span-2 lg:col-span-3">
-            No se encontraron propiedades que coincidan con sus criterios de búsqueda.
+            {dict?.properties?.noResults || 'No se encontraron propiedades que coincidan con sus criterios de búsqueda.'}
           </p>
         )}
       </div>

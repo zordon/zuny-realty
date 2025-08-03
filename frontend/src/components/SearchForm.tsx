@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { Dictionary } from '@/lib/dictionaries'
 
 export interface SearchFormData {
   q: string
@@ -17,6 +18,8 @@ interface SearchFormProps {
   showAdvancedByDefault?: boolean
   onSearch?: (data: SearchFormData) => void
   className?: string
+  dict?: Dictionary
+  lang?: 'en' | 'es'
 }
 
 export default function SearchForm({
@@ -24,7 +27,9 @@ export default function SearchForm({
   initialData = {},
   showAdvancedByDefault = false,
   onSearch,
-  className = ''
+  className = '',
+  dict,
+  lang
 }: SearchFormProps) {
   const router = useRouter()
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(showAdvancedByDefault)
@@ -106,14 +111,14 @@ export default function SearchForm({
           {/* Search Input */}
           <div className="flex-1">
             <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-2">
-              Buscar propiedades
+              {dict?.search?.label || 'Buscar propiedades'}
             </label>
             <input
               type="text"
               id="search"
               value={formData.q}
               onChange={(e) => updateFormData('q', e.target.value)}
-              placeholder="Ubicación, precio, características..."
+              placeholder={dict?.search?.placeholder || "Ubicación, precio, características..."}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none"
             />
           </div>
@@ -121,7 +126,7 @@ export default function SearchForm({
           {/* Property Type Dropdown */}
           <div className="md:w-48">
             <label htmlFor="propertyType" className="block text-sm font-medium text-gray-700 mb-2">
-              Tipo de propiedad
+              {dict?.filter?.propertyType || 'Tipo de propiedad'}
             </label>
             <select
               id="propertyType"
@@ -129,13 +134,13 @@ export default function SearchForm({
               onChange={(e) => updateFormData('propertyType', e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none bg-white"
             >
-              <option value="">Todos los tipos</option>
-              <option value="casa">Casa</option>
-              <option value="apartamento">Apartamento</option>
-              <option value="terreno">Terreno</option>
-              <option value="comercial">Comercial</option>
-              <option value="sale">En Venta</option>
-              <option value="rent">En Alquiler</option>
+              <option value="">{dict?.filter?.allTypes || 'Todos los tipos'}</option>
+              <option value="casa">{dict?.filter?.house || 'Casa'}</option>
+              <option value="apartamento">{dict?.filter?.apartment || 'Apartamento'}</option>
+              <option value="terreno">{dict?.filter?.land || 'Terreno'}</option>
+              <option value="comercial">{dict?.filter?.commercial || 'Comercial'}</option>
+              <option value="sale">{dict?.property?.forSale || 'En Venta'}</option>
+              <option value="rent">{dict?.property?.forRent || 'En Alquiler'}</option>
             </select>
           </div>
 
@@ -160,18 +165,18 @@ export default function SearchForm({
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            Buscar
+            {dict?.search?.button || 'Buscar'}
           </button>
         </div>
 
         {/* Advanced Search Panel */}
         {showAdvancedSearch && (
           <div className="mt-6 pt-6 border-t border-gray-200">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Búsqueda Avanzada</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-4">{dict?.filter?.advancedSearch || 'Búsqueda Avanzada'}</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Precio mínimo
+                  {dict?.filter?.minPrice || 'Precio mínimo'}
                 </label>
                 <input
                   type="number"
@@ -183,7 +188,7 @@ export default function SearchForm({
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Precio máximo
+                  {dict?.filter?.maxPrice || 'Precio máximo'}
                 </label>
                 <input
                   type="number"
@@ -195,14 +200,14 @@ export default function SearchForm({
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Habitaciones
+                  {dict?.property?.bedrooms || 'Habitaciones'}
                 </label>
                 <select 
                   value={formData.minBedrooms}
                   onChange={(e) => updateFormData('minBedrooms', e.target.value)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none bg-white"
                 >
-                  <option value="">Cualquiera</option>
+                  <option value="">{dict?.filter?.any || 'Cualquiera'}</option>
                   <option value="1">1+</option>
                   <option value="2">2+</option>
                   <option value="3">3+</option>
@@ -224,12 +229,12 @@ export default function SearchForm({
         {/* Search Query */}
         <div className="md:col-span-2">
           <label htmlFor="searchQuery" className="block text-sm font-medium text-gray-700 mb-2">
-            Buscar propiedades
+            {dict?.searchForm?.searchProperties || 'Buscar propiedades'}
           </label>
           <input
             type="text"
             id="searchQuery"
-            placeholder="Ubicación, características..."
+            placeholder={dict?.searchForm?.searchPlaceholder || 'Ubicación, características...'}
             value={formData.q}
             onChange={(e) => updateFormData('q', e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
@@ -239,7 +244,7 @@ export default function SearchForm({
         {/* Property Type */}
         <div>
           <label htmlFor="propertyTypeFilter" className="block text-sm font-medium text-gray-700 mb-2">
-            Tipo
+            {dict?.searchForm?.type || 'Tipo'}
           </label>
           <select 
             id="propertyTypeFilter" 
@@ -247,16 +252,16 @@ export default function SearchForm({
             onChange={(e) => updateFormData('propertyType', e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
           >
-            <option value="">Todos</option>
-            <option value="sale">En Venta</option>
-            <option value="rent">En Alquiler</option>
+            <option value="">{dict?.searchForm?.allTypes || 'Todos'}</option>
+            <option value="sale">{dict?.searchForm?.forSale || 'En Venta'}</option>
+            <option value="rent">{dict?.searchForm?.forRent || 'En Alquiler'}</option>
           </select>
         </div>
         
         {/* Bedrooms */}
         <div>
           <label htmlFor="bedroomsFilter" className="block text-sm font-medium text-gray-700 mb-2">
-            Habitaciones
+            {dict?.searchForm?.bedrooms || 'Habitaciones'}
           </label>
           <select 
             id="bedroomsFilter" 
@@ -264,7 +269,7 @@ export default function SearchForm({
             onChange={(e) => updateFormData('minBedrooms', e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
           >
-            <option value="">Cualquiera</option>
+            <option value="">{dict?.searchForm?.any || 'Cualquiera'}</option>
             <option value="1">1+</option>
             <option value="2">2+</option>
             <option value="3">3+</option>
@@ -275,7 +280,7 @@ export default function SearchForm({
         {/* Min Price */}
         <div>
           <label htmlFor="minPriceFilter" className="block text-sm font-medium text-gray-700 mb-2">
-            Precio mín.
+            {dict?.searchForm?.minPrice || 'Precio mín.'}
           </label>
           <input
             type="number"
@@ -290,12 +295,12 @@ export default function SearchForm({
         {/* Max Price */}
         <div>
           <label htmlFor="maxPriceFilter" className="block text-sm font-medium text-gray-700 mb-2">
-            Precio máx.
+            {dict?.searchForm?.maxPrice || 'Precio máx.'}
           </label>
           <input
             type="number"
             id="maxPriceFilter"
-            placeholder="Sin límite"
+            placeholder={dict?.searchForm?.noLimit || 'Sin límite'}
             value={formData.maxPrice}
             onChange={(e) => updateFormData('maxPrice', e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
@@ -309,13 +314,13 @@ export default function SearchForm({
           onClick={handleSearch}
           className="flex-1 bg-yellow-700 text-white px-6 py-2 rounded-md hover:bg-yellow-800 transition-colors duration-200 font-medium"
         >
-          Buscar Propiedades
+          {dict?.searchForm?.searchButton || 'Buscar Propiedades'}
         </button>
         <button 
           onClick={handleClearFilters}
           className="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors duration-200"
         >
-          Limpiar Filtros
+          {dict?.searchForm?.clearFilters || 'Limpiar Filtros'}
         </button>
       </div>
     </div>

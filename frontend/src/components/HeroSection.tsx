@@ -3,8 +3,14 @@
 import React from 'react'
 import Image from 'next/image'
 import SearchForm from './SearchForm'
+import { Dictionary } from '@/lib/dictionaries'
 
-const HeroSection: React.FC = () => {
+interface HeroSectionProps {
+  dict: Dictionary;
+  lang: 'en' | 'es';
+}
+
+const HeroSection: React.FC<HeroSectionProps> = ({ dict, lang }) => {
 
   return (
     <section className="relative bg-gradient-to-r from-blue-900 via-blue-800 to-blue-700 min-h-[600px] flex items-center">
@@ -26,12 +32,12 @@ const HeroSection: React.FC = () => {
       <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-8 text-center leading-tight">
-            Encuentra tu{' '}
-            <span className="text-red-400">hogar ideal</span>
+            {dict.hero.title}{' '}
+            <span className="text-red-400">{dict.hero.highlight}</span>
           </h1>
           
                     {/* Search Form */}
-          <SearchForm variant="hero" />
+          <SearchForm variant="hero" dict={dict} lang={lang} />
         </div>
       </div>
 

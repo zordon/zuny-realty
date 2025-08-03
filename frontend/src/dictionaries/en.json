@@ -1,0 +1,157 @@
+{
+  "nav": {
+    "home": "Home",
+    "properties": "Properties",
+    "about": "About", 
+    "contact": "Contact"
+  },
+  "header": {
+    "tagline": "Your ideal home awaits",
+    "call": "Call:"
+  },
+  "hero": {
+    "title": "Find your",
+    "highlight": "ideal home"
+  },
+  "home": {
+    "featuredTitle": "Featured",
+    "featuredHighlight": "Properties",
+    "featuredDescription": "Discover our most exclusive properties, carefully selected to offer you the best options",
+    "viewAllProperties": "View All Properties",
+    "whyChooseUs": "Why choose us?",
+    "whyChooseUsDescription": "With years of experience in the Panamanian real estate market, we offer personalized and professional service to help you find the property of your dreams.",
+    "personalizedService": "Personalized Service",
+    "personalizedServiceDescription": "Individual attention adapted to your specific needs",
+    "widePortfolio": "Wide Portfolio",
+    "widePortfolioDescription": "From apartments to beach houses and commercial properties",
+    "expertAdvice": "Expert Advice",
+    "expertAdviceDescription": "Professional guidance throughout your real estate journey",
+    "localExperience": "Local Experience",
+    "localExperienceDescription": "Deep knowledge of the Panamanian real estate market",
+    "readyToFind": "Ready to find your ideal home?",
+    "contactDescription": "Contact us today and we'll help you find the perfect property for you",
+    "callNow": "Call Now",
+    "contactForm": "Contact Form"
+  },
+  "propertyCard": {
+    "featured": "Featured",
+    "viewDetails": "View Details"
+  },
+  "property": {
+    "bedrooms": "Bedrooms",
+    "bathrooms": "Bathrooms",
+    "area": "Area", 
+    "type": "Type",
+    "forSale": "For Sale",
+    "forRent": "For Rent",
+    "description": "Description",
+    "features": "Features",
+    "agentInfo": "Agent Information",
+    "phone": "Phone:",
+    "email": "Email:",
+    "perMonth": "/month",
+    "loading": "Loading property...",
+    "notFound": "Property not found.",
+    "prevImage": "Previous image",
+    "nextImage": "Next image", 
+    "goToImage": "Go to image",
+    "thumbnail": "Thumbnail"
+  },
+  "search": {
+    "label": "Search properties",
+    "placeholder": "Location, price, features...",
+    "button": "Search"
+  },
+  "filter": {
+    "allTypes": "All types",
+    "propertyType": "Property type",
+    "house": "House",
+    "apartment": "Apartment",
+    "land": "Land",
+    "commercial": "Commercial",
+    "advancedSearch": "Advanced Search",
+    "any": "Any",
+    "minBedrooms": "Min bedrooms",
+    "maxPrice": "Max price",
+    "minPrice": "Min price"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "name": "Name",
+    "email": "Email", 
+    "message": "Message",
+    "send": "Send"
+  },
+  "properties": {
+    "title": "Our",
+    "properties": "Properties",
+    "description": "Explore our wide selection of properties in the best locations in Panama",
+    "searchResults": "Search results",
+    "propertyFound": "property found",
+    "propertiesFound": "properties found",
+    "forSale": "For Sale",
+    "forRent": "For Rent",
+    "bedrooms": "bedrooms",
+    "from": "From",
+    "to": "To",
+    "loadMore": "Load More Properties",
+    "loading": "Loading...",
+    "noMoreProperties": "No more properties to load",
+    "noResults": "No properties found matching your search criteria."
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "noResults": "No results found",
+    "tryAgain": "Try again",
+    "loadingContent": "Loading content..."
+  },
+  "searchForm": {
+    "searchProperties": "Search properties",
+    "searchPlaceholder": "Location, features...",
+    "type": "Type",
+    "allTypes": "All",
+    "forSale": "For Sale",
+    "forRent": "For Rent",
+    "bedrooms": "Bedrooms",
+    "any": "Any",
+    "minPrice": "Min Price",
+    "maxPrice": "Max Price",
+    "noLimit": "No limit",
+    "searchButton": "Search Properties",
+    "clearFilters": "Clear Filters"
+  },
+  "footer": {
+    "companyDescription": "Your trusted partner in the Panamanian real estate market. We find the perfect property for you with personalized and professional service.",
+    "quickLinks": "Quick Links",
+    "contact": "Contact",
+    "copyright": "© 2024 ZuR Real Estate. All rights reserved."
+  },
+  "about": {
+    "title": "About Us",
+    "welcome": "Welcome to ZuR Real Estate. We are a dedicated team of professionals passionate about helping our clients find the perfect property in Panama.",
+    "mission": "Our mission is to provide exceptional, transparent, and personalized service. We believe in building long-term relationships with our clients, based on trust and mutual understanding of their needs and aspirations.",
+    "expertise": "With deep knowledge of the local real estate market, from vibrant urban properties in Panama City to serene beach houses and lots in the interior, we are equipped to guide you through every step of your real estate journey.",
+    "values": "Our Values",
+    "integrity": "Integrity",
+    "integrityDesc": "We act with honesty and ethics in all our interactions.",
+    "professionalism": "Professionalism",
+    "professionalismDesc": "We strive for excellence and efficiency in our work.",
+    "clientFocus": "Client Focus",
+    "clientFocusDesc": "We put our clients' needs first, always.",
+    "passionForPanama": "Passion for Panama",
+    "passionForPanamaDesc": "We love this country and are excited to share its real estate opportunities.",
+    "conclusion": "Whether you're looking to buy, sell, or rent, ZuR Real Estate is here to ensure your experience is as smooth and successful as possible. Contact us today to discover how we can help you."
+  },
+  "contact": {
+    "title": "Contact Us",
+    "contactInfo": "Contact Information",
+    "phone": "Phone:",
+    "email": "Email:",
+    "address": "Address:",
+    "addressText": "Panama City, Panama (Please contact us to schedule an appointment)",
+    "whatsapp": "WhatsApp",
+    "sendMessage": "Send us a Message",
+    "messageDescription": "If you prefer, you can complete the following form and we will contact you shortly."
+  }
+}

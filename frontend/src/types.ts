@@ -18,6 +18,17 @@ export interface Feature {
   };
 }
 
+export interface Category {
+  id: number;
+  documentId: string;
+  name: string;
+  slug: string;
+  createdAt?: string;
+  updatedAt?: string;
+  publishedAt?: string;
+  locale?: string;
+}
+
 export interface Property {
   id: string;
   documentId: string;
@@ -29,7 +40,7 @@ export interface Property {
   bathrooms: number;
   areaSqFt: number;
   description: string;
-  images: string[];
+  images: (string | StrapiImage)[];
   propertyType: PropertyType;
   features: Feature[];
   agentName?: string;
@@ -38,6 +49,8 @@ export interface Property {
   isFeatured?: boolean;
   latitude?: number;
   longitude?: number;
+  characteristics?: StrapiCharacteristic[];
+  category?: Category;
 }
 
 // Strapi specific types
@@ -110,6 +123,7 @@ export interface StrapiPropertyDataItem {
   
   // Update characteristics to use StrapiCharacteristic type
   characteristics?: StrapiCharacteristic[] | null;
+  category?: Category | null;
 }
 
 // Strapi specific types

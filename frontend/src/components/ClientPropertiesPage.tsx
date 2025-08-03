@@ -5,14 +5,23 @@ import { useSearchParams } from 'next/navigation'
 import { Property, PropertyType } from '@/types'
 import SearchForm, { SearchFormData } from './SearchForm'
 import PropertyCard from './PropertyCard'
+import { Dictionary } from '@/lib/dictionaries'
+import { fetchPropertiesWithPagination, PropertySearchParams } from '@/lib/api'
 
 interface ClientPropertiesPageProps {
   allProperties: Property[]
+  dict: Dictionary
+  lang: 'en' | 'es'
 }
 
-export default function ClientPropertiesPage({ allProperties }: ClientPropertiesPageProps) {
+export default function ClientPropertiesPage({ allProperties, dict, lang }: ClientPropertiesPageProps) {
   const searchParams = useSearchParams()
   const [filteredProperties, setFilteredProperties] = useState<Property[]>(allProperties)
+  const [displayedProperties, setDisplayedProperties] = useState<Property[]>(allProperties)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [isLoading, setIsLoading] = useState(false)
+  const [hasMore, setHasMore] = useState(true)
+  const [totalProperties, setTotalProperties] = useState(allProperties.length)
   
   // Parse search parameters from URL
   const searchParamsForAPI = useMemo(() => {
@@ -95,22 +104,59 @@ export default function ClientPropertiesPage({ allProperties }: ClientProperties
     }
 
     setFilteredProperties(filtered)
+    setDisplayedProperties(filtered)
+    setCurrentPage(1)
+    setHasMore(filtered.length > 0)
+    setTotalProperties(filtered.length)
   }, [allProperties, searchParamsForAPI])
 
   const hasActiveFilters = Object.keys(searchParamsForAPI).length > 0
+
+  // Load more properties function
+  const loadMoreProperties = async () => {
+    if (isLoading || !hasMore) return
+
+    setIsLoading(true)
+    try {
+      const nextPage = currentPage + 1
+      const searchParamsForAPI: PropertySearchParams = {
+        q: searchParams.get('q') || undefined,
+        propertyType: searchParams.get('propertyType') || undefined,
+        minBedrooms: searchParams.get('minBedrooms') ? parseInt(searchParams.get('minBedrooms')!, 10) : undefined,
+        minPrice: searchParams.get('minPrice') ? parseInt(searchParams.get('minPrice')!, 10) : undefined,
+        maxPrice: searchParams.get('maxPrice') ? parseInt(searchParams.get('maxPrice')!, 10) : undefined,
+        page: nextPage,
+        limit: 12 // Load 12 properties per page
+      }
+
+      const { properties: newProperties, pagination } = await fetchPropertiesWithPagination(searchParamsForAPI, lang === 'en' ? 'en' : 'es-419')
+      
+      if (newProperties.length > 0) {
+        setDisplayedProperties(prev => [...prev, ...newProperties])
+        setCurrentPage(nextPage)
+        setHasMore(nextPage < pagination.pageCount)
+      } else {
+        setHasMore(false)
+      }
+    } catch (error) {
+      console.error('Error loading more properties:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
     <>
       {/* Page Header */}
       <div className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-          Nuestras <span className="text-yellow-700">Propiedades</span>
+          {dict.properties.title} <span className="text-yellow-700">{dict.properties.properties}</span>
         </h1>
         
         {hasActiveFilters ? (
           <div className="mb-4">
             <p className="text-lg text-gray-600 mb-2">
-              Resultados de búsqueda ({filteredProperties.length} {filteredProperties.length === 1 ? 'propiedad encontrada' : 'propiedades encontradas'})
+              {dict.properties.searchResults} ({filteredProperties.length} {filteredProperties.length === 1 ? dict.properties.propertyFound : dict.properties.propertiesFound})
             </p>
             <div className="flex flex-wrap justify-center gap-2 text-sm">
               {searchParamsForAPI.q && (
@@ -120,29 +166,29 @@ export default function ClientPropertiesPage({ allProperties }: ClientProperties
               )}
               {searchParamsForAPI.propertyType && (
                 <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full">
-                  {searchParamsForAPI.propertyType === 'sale' ? 'En Venta' : 'En Alquiler'}
+                  {searchParamsForAPI.propertyType === 'sale' ? dict.properties.forSale : dict.properties.forRent}
                 </span>
               )}
               {searchParamsForAPI.minBedrooms && (
                 <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full">
-                  {searchParamsForAPI.minBedrooms}+ habitaciones
+                  {searchParamsForAPI.minBedrooms}+ {dict.properties.bedrooms}
                 </span>
               )}
               {searchParamsForAPI.minPrice && (
                 <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full">
-                  Desde ${searchParamsForAPI.minPrice.toLocaleString()}
+                  {dict.properties.from} ${searchParamsForAPI.minPrice.toLocaleString()}
                 </span>
               )}
               {searchParamsForAPI.maxPrice && (
                 <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full">
-                  Hasta ${searchParamsForAPI.maxPrice.toLocaleString()}
+                  {dict.properties.to} ${searchParamsForAPI.maxPrice.toLocaleString()}
                 </span>
               )}
             </div>
           </div>
         ) : (
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Explora nuestra amplia selección de propiedades en las mejores ubicaciones de Panamá
+            {dict.properties.description}
           </p>
         )}
       </div>
@@ -152,27 +198,41 @@ export default function ClientPropertiesPage({ allProperties }: ClientProperties
         variant="filters" 
         initialData={initialSearchData}
         className="mb-8"
+        dict={dict}
+        lang={lang}
       />
 
       {/* Properties Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {filteredProperties.length > 0 ? (
-          filteredProperties.map((property: Property) => (
-            <PropertyCard key={property.id} property={property} />
+        {displayedProperties.length > 0 ? (
+          displayedProperties.map((property: Property) => (
+            <PropertyCard key={property.id} property={property} dict={dict} lang={lang} />
           ))
         ) : (
           <p className="text-center text-gray-600 md:col-span-2 lg:col-span-3">
-            No se encontraron propiedades que coincidan con sus criterios de búsqueda.
+            {dict.properties.noResults}
           </p>
         )}
       </div>
 
-      {/* Load More - This could be implemented for pagination if needed */}
-      <div className="text-center mt-12">
-        <button className="bg-yellow-700 text-white px-8 py-3 rounded-lg hover:bg-yellow-800 transition-colors duration-200 font-medium">
-          Cargar Más Propiedades (Funcionalidad Pendiente)
-        </button>
-      </div>
+      {/* Load More Button */}
+      {displayedProperties.length > 0 && (
+        <div className="text-center mt-12">
+          {hasMore ? (
+            <button 
+              onClick={loadMoreProperties}
+              disabled={isLoading}
+              className="bg-yellow-700 text-white px-8 py-3 rounded-lg hover:bg-yellow-800 transition-colors duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? dict.properties.loading : dict.properties.loadMore}
+            </button>
+          ) : (
+            <p className="text-gray-600 text-lg">
+              {dict.properties.noMoreProperties}
+            </p>
+          )}
+        </div>
+      )}
     </>
   )
 } 

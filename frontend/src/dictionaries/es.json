@@ -75,13 +75,7 @@
     "maxPrice": "Precio máximo",
     "minPrice": "Precio mínimo"
   },
-  "contact": {
-    "title": "Contáctanos",
-    "name": "Nombre",
-    "email": "Email",
-    "message": "Mensaje",
-    "send": "Enviar"
-  },
+
   "properties": {
     "title": "Nuestras",
     "properties": "Propiedades",
@@ -153,5 +147,9 @@
     "whatsapp": "WhatsApp",
     "sendMessage": "Envíanos un Mensaje",
     "messageDescription": "Si prefieres, puedes completar el siguiente formulario y nos pondremos en contacto contigo a la brevedad."
+  },
+  "propertyNotFound": {
+    "title": "Propiedad no encontrada",
+    "description": "La propiedad que buscas no existe o ha sido removida."
   }
 }
